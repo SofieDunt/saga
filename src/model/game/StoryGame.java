@@ -21,6 +21,13 @@ public interface StoryGame {
   void next(int decision) throws IllegalArgumentException;
 
   /**
+   * Gets the name of the story.
+   *
+   * @return the story name
+   */
+  String getName();
+
+  /**
    * Gets the current choice to be made.
    *
    * @return the current choice

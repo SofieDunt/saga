@@ -3,6 +3,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import model.game.Choice;
 import model.game.SimpleChoice;
@@ -12,10 +13,15 @@ import model.game.StoryGame;
 import model.game.decision.ConsequentialDecision;
 import model.game.decision.Decision;
 import model.game.decision.DependentDecision;
+import model.game.decision.OutcomeDeterminer;
 import model.game.decision.SimpleDecision;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * Tests for {@link Choice}s and {@link Decision}s, testing with different {@link Decision}
+ * implementations.
+ */
 public abstract class ChoiceAndDecisionTests {
 
   private static StoryGame story;
@@ -23,10 +29,23 @@ public abstract class ChoiceAndDecisionTests {
       new ArrayList<>(Collections.singletonList(endDecision())));
   protected static final Choice endChoice = SimpleChoice.endChoice();
 
+  /**
+   * Creates a decision that leads to the end for testing.
+   *
+   * @return the decision instance
+   */
   protected abstract Decision endDecision();
 
+  /**
+   * Creates a decision that leads to the toEndChoice for testing.
+   *
+   * @return the decision instance
+   */
   protected abstract Decision decision();
 
+  /**
+   * A class for testing {@link SimpleDecision} implementations of {@link Decision}.
+   */
   public static class SimpleDecisionTest extends ChoiceAndDecisionTests {
 
     @Override
@@ -40,6 +59,9 @@ public abstract class ChoiceAndDecisionTests {
     }
   }
 
+  /**
+   * A class for testing {@link ConsequentialDecision} implementations of {@link Decision}.
+   */
   public static class ConsequentialDecisionTest extends ChoiceAndDecisionTests {
 
     @Override
@@ -120,14 +142,39 @@ public abstract class ChoiceAndDecisionTests {
 
   @Test
   public void makeDependentDecision() {
+    OutcomeDeterminer determiner = TestDataProvider.getDeterminer();
+    StoryGame storyGame1 = TestDataProvider.strengthStory();
+
     Map<String, StatusUpdate> updateMap = new HashMap<>();
     updateMap.put("strength", (i) -> i + 1);
-    assertEquals("Game over, no choices left.",
-        new DependentDecision("get strength", updateMap, TestDataProvider.getDeterminer())
-            .makeDecision(TestDataProvider.strengthStory()).toString());
     assertEquals("continue(1) or quit(2)",
-        new DependentDecision("don't get strength", TestDataProvider.getDeterminer())
+        new DependentDecision("get strength", updateMap, determiner)
+            .makeDecision(storyGame1).toString());
+    assertEquals("Game over, no choices left.",
+        new DependentDecision("get strength", updateMap, determiner)
+            .makeDecision(storyGame1).toString());
+    assertEquals("continue(1) or quit(2)",
+        new DependentDecision("don't get strength", determiner)
             .makeDecision(TestDataProvider.strengthStory()).toString());
+
+    List<Decision> choices = new ArrayList<>();
+    Choice getStrengthChoice = new SimpleChoice(choices);
+    updateMap.put("strength", (i) -> i + 1);
+    choices.add(new DependentDecision("get strength", updateMap, determiner));
+    choices.add(new DependentDecision("don't get strength", determiner));
+
+    Map<String, Integer> statuses = new HashMap<>();
+    statuses.put("strength", -5);
+    StoryGame storyGame2 = new SimpleStoryGame("Strength!", getStrengthChoice, statuses);
+    assertEquals("continue(1) or quit(2)",
+        new DependentDecision("get strength", updateMap, determiner)
+            .makeDecision(storyGame2).toString());
+    storyGame2.next(0);
+    for (int i = 0; i < 4; i++) {
+      assertEquals("continue(1) or quit(2)", storyGame2.getCurrentChoice().toString());
+      storyGame2.next(0);
+    }
+    assertEquals("Game over, no choices left.", storyGame2.getCurrentChoice().toString());
   }
 
   // CHOICES

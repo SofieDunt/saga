@@ -4,6 +4,9 @@ import java.util.Random;
 import model.game.StoryGame;
 import org.junit.Test;
 
+/**
+ * Tests for {@link model.game.SimpleStoryGame}s.
+ */
 public class SimpleStoryGameTest {
 
   private final StoryGame goRight = TestDataProvider.goRight();
@@ -46,6 +49,8 @@ public class SimpleStoryGameTest {
 
   @Test
   public void playThroughDependentGame() {
+    strengthStory.next(0);
+    assertEquals(2, strengthStory.getCurrentChoice().getOptions().size());
     strengthStory.next(0);
     assertEquals(0, strengthStory.getCurrentChoice().getOptions().size());
   }

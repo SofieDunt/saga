@@ -6,16 +6,26 @@ import model.game.StoryGame;
  * An interface of a model for a choose-your-own-adventure story application in which a user can
  * load and play a story in their library.
  */
-public interface StoryPlayerModel {
+public interface StoryPlayerModel extends StoryPlayerModelState {
 
   /**
-   * Adds the given story to the user's library, renaming it if a story of that name already exists
-   * in the library by adding a count in parentheses after the name, ex. "Story (1)".
+   * Adds the given story to the user's library, renaming it in the library if a story of that name
+   * already exists in the library by adding a count in parentheses after the name, ex. "Story (1)".
+   * (Note that when renaming, the actual name of the story does not change, but its alias in the
+   * library does).
    *
    * @param story the story to add to the library
    * @throws IllegalArgumentException if the given story is null
    */
   void addStory(StoryGame story) throws IllegalArgumentException;
+
+  /**
+   * Removes the given story from the user's library.
+   *
+   * @param name the alias name of the story to remove, as it is in the user's library
+   * @throws IllegalArgumentException if the alias does not exist in the library
+   */
+  void removeStory(String name) throws IllegalArgumentException;
 
   /**
    * Loads the story of the given name to play.

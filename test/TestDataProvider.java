@@ -14,8 +14,16 @@ import model.game.decision.DependentDecision;
 import model.game.decision.OutcomeDeterminer;
 import model.game.decision.SimpleDecision;
 
+/**
+ * A class to provide data instances for testing.
+ */
 public class TestDataProvider {
 
+  /**
+   * Returns a choice between right and left.
+   *
+   * @return the choice object
+   */
   public static Choice twoDirectionChoice() {
     Decision rightDecision = new SimpleDecision("Go right", SimpleChoice.endChoice());
     List<Decision> choices = new ArrayList<>(Collections.singletonList(rightDecision));
@@ -27,6 +35,11 @@ public class TestDataProvider {
     return directionChoice;
   }
 
+  /**
+   * Returns a choice between right, left, and straight.
+   *
+   * @return the choice object
+   */
   public static Choice directionChoice() {
     Decision rightDecision = new SimpleDecision("Go right", SimpleChoice.endChoice());
     List<Decision> choices = new ArrayList<>(Collections.singletonList(rightDecision));
@@ -41,6 +54,12 @@ public class TestDataProvider {
     return directionChoice;
   }
 
+  /**
+   * Returns a story game that does not end until a user goes right and keeps track of the number of
+   * times the user goes in other directions.
+   *
+   * @return the story object
+   */
   public static StoryGame goRight() {
     Map<String, Integer> statuses = new HashMap<>();
     statuses.put("numLefts", 0);
@@ -48,6 +67,12 @@ public class TestDataProvider {
     return new SimpleStoryGame("Go Right!", directionChoice(), statuses);
   }
 
+  /**
+   * Represents a story game that uses dependent decisions, which ends if a user chooses "strength"
+   * or later quits.
+   *
+   * @return the story object
+   */
   public static StoryGame strengthStory() {
     Map<String, StatusUpdate> updateMap = new HashMap<>();
     List<Decision> choices = new ArrayList<>();
@@ -57,10 +82,16 @@ public class TestDataProvider {
     choices.add(new DependentDecision("don't get strength", getDeterminer()));
 
     Map<String, Integer> statuses = new HashMap<>();
-    statuses.put("strength", 0);
+    statuses.put("strength", -1);
     return new SimpleStoryGame("Strength!", getStrengthChoice, statuses);
   }
 
+  /**
+   * Returns an {@link OutcomeDeterminer} that returns one of two outcomes based on a story's
+   * "strength" status.
+   *
+   * @return the determiner object
+   */
   public static OutcomeDeterminer getDeterminer() {
     return statuses -> {
       if (statuses.containsKey("strength")) {
@@ -69,7 +100,11 @@ public class TestDataProvider {
         } else {
           List<Decision> choices = new ArrayList<>();
           Choice quitOrContinue = new SimpleChoice(choices);
-          choices.add(new SimpleDecision("continue", quitOrContinue));
+          Map<String, StatusUpdate> addStrength = new HashMap<>();
+          addStrength.put("strength", (i) -> i + 1);
+          choices.add(new DependentDecision(
+              new ConsequentialDecision("continue", quitOrContinue, addStrength),
+              getDeterminer()));
           choices.add(new SimpleDecision("quit", SimpleChoice.endChoice()));
           return quitOrContinue;
         }

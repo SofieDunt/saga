@@ -53,6 +53,11 @@ public class SimpleStoryGame implements StoryGame {
   }
 
   @Override
+  public String getName() {
+    return this.name;
+  }
+
+  @Override
   public Choice getCurrentChoice() {
     return this.choices.get(this.choices.size() - 1);
   }
