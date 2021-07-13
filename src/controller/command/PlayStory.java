@@ -1,12 +1,13 @@
 package controller.command;
 
+import controller.command.Command;
 import model.StoryPlayerModel;
 import utils.Utils;
 
 /**
  * A command object to play a story in the model library.
  */
-public class PlayStory implements StoryPlayerCommand {
+public class PlayStory implements Command<StoryPlayerModel<?>> {
 
   private final String storyName;
 

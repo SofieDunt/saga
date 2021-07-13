@@ -21,7 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Tests for {@link controller.command.StoryPlayerCommand}s and {@link
+ * Tests for {@link controller.command.Command}s and {@link
  * controller.command.IOCommand}s.
  */
 public class CommandTests {

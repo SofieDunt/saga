@@ -1,7 +1,7 @@
 import static org.junit.Assert.assertEquals;
 
 import controller.AbstractController;
-import controller.SimpleController;
+import controller.PlayerController;
 import java.io.IOException;
 import java.io.StringReader;
 import java.nio.CharBuffer;
@@ -111,13 +111,13 @@ public class BadIOControllerTests {
 
   @Test(expected = IllegalStateException.class)
   public void testFailedRenderMessage() {
-    new SimpleController(new SimpleStoryPlayerModel(), new StringReader(""),
+    new PlayerController(new SimpleStoryPlayerModel(), new StringReader(""),
         new BadAppendable(1)).play();
   }
 
   @Test(expected = IllegalStateException.class)
   public void testFailedRenderLibrary() {
-    new SimpleController(new SimpleStoryPlayerModel(), new StringReader(""),
+    new PlayerController(new SimpleStoryPlayerModel(), new StringReader(""),
         new BadAppendable(3)).play();
   }
 
@@ -126,13 +126,13 @@ public class BadIOControllerTests {
     StoryPlayerModel<StoryGame> model = new SimpleStoryPlayerModel();
     model.addStory(TestDataProvider.goRight());
     model.playStory("Go Right!");
-    new SimpleController(model, new StringReader(""), new BadAppendable(2)).play();
+    new PlayerController(model, new StringReader(""), new BadAppendable(2)).play();
   }
 
   @Test
   public void testFailedAppendMessage() {
     try {
-      new SimpleController(new SimpleStoryPlayerModel(), new StringReader(""),
+      new PlayerController(new SimpleStoryPlayerModel(), new StringReader(""),
           new BadAppendable(1)).play();
     } catch (IllegalStateException e) {
       assertEquals("The view can not be rendered.", e.getMessage());
@@ -142,7 +142,7 @@ public class BadIOControllerTests {
   @Test
   public void testFailedReadClosesApplication() {
     StringBuilder output = new StringBuilder();
-    new SimpleController(new SimpleStoryPlayerModel(), new BadReadable(), output).play();
+    new PlayerController(new SimpleStoryPlayerModel(), new BadReadable(), output).play();
     assertEquals("Welcome to the story player!\n"
         + "Your story library:\n"
         + "You don't have any stories in your library. Import some!\n"

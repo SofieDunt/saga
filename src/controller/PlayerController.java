@@ -1,5 +1,7 @@
 package controller;
 
+import controller.AbstractController;
+import controller.command.Command;
 import controller.command.ExportStory;
 import controller.command.IOCommand;
 import controller.command.ImportStory;
@@ -8,7 +10,6 @@ import controller.command.PlayStory;
 import controller.command.QuitStory;
 import controller.command.RemoveStory;
 import controller.command.Restart;
-import controller.command.StoryPlayerCommand;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,14 +25,14 @@ import view.TextView;
  * {@link StoryPlayerModel} and a {@link StoryPlayerView}. Supports importing, exporting, and
  * playing through, restarting, quitting, and removing stories.
  */
-public class SimpleController extends AbstractController {
+public class PlayerController extends AbstractController {
 
   // The model the controller controls
   private final StoryPlayerModel<StoryGame> model;
   // The map of known model commands
-  protected final Map<String, Supplier<StoryPlayerCommand>> knownCommands;
+  protected final Map<String, Supplier<Command<StoryPlayerModel<?>>>> knownCommands;
   // The map of known IO commands
-  protected final Map<String, Supplier<IOCommand<StoryGame>>> ioCommands;
+  protected final Map<String, Supplier<IOCommand<StoryPlayerModel<StoryGame>>>> ioCommands;
 
   /**
    * Constructs a {@code SimpleController} that controls the given model, outputs to a text view
@@ -42,7 +43,7 @@ public class SimpleController extends AbstractController {
    * @param readable   the readable to read from
    * @throws IllegalArgumentException if any argument is null
    */
-  public SimpleController(StoryPlayerModel<StoryGame> model, Readable readable,
+  public PlayerController(StoryPlayerModel<StoryGame> model, Readable readable,
       Appendable appendable)
       throws IllegalArgumentException {
     super(new TextView(model, appendable), readable);

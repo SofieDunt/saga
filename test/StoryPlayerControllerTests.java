@@ -3,7 +3,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import controller.SimpleController;
+import controller.PlayerController;
 import controller.StoryPlayerController;
 import controller.command.PlayStory;
 import controller.command.Restart;
@@ -17,7 +17,7 @@ import org.junit.Test;
 /**
  * Tests to ensure {@link StoryPlayerController}s control their models and view correctly.
  */
-public abstract class ControllerTests {
+public abstract class StoryPlayerControllerTests {
 
   protected final StoryPlayerModel<StoryGame> model = new SimpleStoryPlayerModel();
   protected final Appendable output = new StringBuilder();
@@ -31,13 +31,13 @@ public abstract class ControllerTests {
   protected abstract StoryPlayerController controller(Readable input);
 
   /**
-   * A class to test instances of {@link SimpleController}s.
+   * A class to test instances of {@link PlayerController}s.
    */
-  public static class SimpleControllerTests extends ControllerTests {
+  public static class PlayerControllerTest extends StoryPlayerControllerTests {
 
     @Override
     protected StoryPlayerController controller(Readable input) {
-      return new SimpleController(model, input, output);
+      return new PlayerController(model, input, output);
     }
   }
 

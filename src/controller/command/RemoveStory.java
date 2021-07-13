@@ -1,12 +1,13 @@
 package controller.command;
 
+import controller.command.Command;
 import model.StoryPlayerModel;
 import utils.Utils;
 
 /**
  * A command object to remove a story from the model library.
  */
-public class RemoveStory implements StoryPlayerCommand {
+public class RemoveStory implements Command<StoryPlayerModel<?>> {
 
   private final String storyName;
 

@@ -1,7 +1,7 @@
 package controller.command;
 
+import controller.command.IOCommand;
 import io.TextImporter;
-import java.io.IOException;
 import model.StoryPlayerModel;
 import model.game.StoryGame;
 import utils.Utils;
@@ -9,7 +9,7 @@ import utils.Utils;
 /**
  * A command object to import a story from a text file and add it to the model's library.
  */
-public class ImportStory implements IOCommand<StoryGame> {
+public class ImportStory implements IOCommand<StoryPlayerModel<StoryGame>> {
 
   private final String filePath;
 
@@ -24,7 +24,7 @@ public class ImportStory implements IOCommand<StoryGame> {
 
   @Override
   public void execute(StoryPlayerModel<StoryGame> model)
-      throws IllegalArgumentException, IOException {
+      throws IllegalArgumentException {
     Utils.ensureNotNull(model, "Model can't be null");
     model.addStory(new TextImporter().importStory(this.filePath));
   }

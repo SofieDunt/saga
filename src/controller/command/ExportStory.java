@@ -1,5 +1,6 @@
 package controller.command;
 
+import controller.command.IOCommand;
 import io.TextExporter;
 import java.io.IOException;
 import model.StoryPlayerModel;
@@ -10,7 +11,7 @@ import utils.Utils;
  * A command object to export a story as a text file, either the in-progress or original version,
  * from the model's library.
  */
-public class ExportStory implements IOCommand<StoryGame> {
+public class ExportStory implements IOCommand<StoryPlayerModel<StoryGame>> {
 
   private final String filePath;
   private final String storyName;

@@ -1,12 +1,13 @@
 package controller.command;
 
+import controller.command.Command;
 import model.StoryPlayerModel;
 import utils.Utils;
 
 /**
  * A command object to advance to the make a decision in the loaded story.
  */
-public class Next implements StoryPlayerCommand {
+public class Next implements Command<StoryPlayerModel<?>> {
 
   private final int decision;
 
