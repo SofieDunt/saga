@@ -8,7 +8,9 @@ import java.util.Scanner;
 public class IOUtils {
 
   /**
-   * Returns the next string in the given scanner.
+   * Returns the next string in the given scanner. If the string begins with {@code "}, returns all
+   * content, including whitespace and with newlines as whitespace, between the first character and
+   * the next {@code "}.
    *
    * @param sc  the scanner
    * @param msg the message to throw if there is no next
