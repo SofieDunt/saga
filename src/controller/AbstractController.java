@@ -9,7 +9,7 @@ import view.StoryPlayerView;
 
 /**
  * An abstract controller for a story player application to handle the logic of processing user
- * input using the command pattern.
+ * input.
  */
 public abstract class AbstractController implements StoryPlayerController {
 
@@ -63,7 +63,9 @@ public abstract class AbstractController implements StoryPlayerController {
   }
 
   /**
-   * Handles user inputs for the user to enter commands. If reading input fails, quits.
+   * <<<<<<< HEAD Handles user inputs for the user to enter commands. If reading input fails, quits.
+   * ======= Handles user inputs for the user to process their images or to quit. If reading input
+   * fails, quits. >>>>>>> 837fc62dbcd34d43f48e4530502393ada74ba848
    *
    * @return true if the user has quit, false if otherwise
    * @throws IllegalStateException if writing to the Appendable object used by the controller
