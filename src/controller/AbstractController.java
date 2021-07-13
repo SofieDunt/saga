@@ -5,7 +5,7 @@ import java.util.Scanner;
 import java.util.function.Predicate;
 import utils.IOUtils;
 import utils.Utils;
-import view.StoryPlayerView;
+import view.LibraryApplicationView;
 
 /**
  * An abstract controller for a story player application to handle the logic of processing user
@@ -14,7 +14,7 @@ import view.StoryPlayerView;
 public abstract class AbstractController implements StoryPlayerController {
 
   // The view the controller controls
-  private final StoryPlayerView view;
+  private final LibraryApplicationView view;
   // The scanner reading through user inputs
   private final Scanner scanner;
 
@@ -29,7 +29,7 @@ public abstract class AbstractController implements StoryPlayerController {
    * @param readable the readable to read from
    * @throws IllegalArgumentException if any argument is null
    */
-  protected AbstractController(StoryPlayerView view, Readable readable)
+  protected AbstractController(LibraryApplicationView view, Readable readable)
       throws IllegalArgumentException {
     Utils.ensureNotNull(view, "View can't be null");
     Utils.ensureNotNull(readable, "Readable can't be null");

@@ -7,20 +7,22 @@ import utils.Utils;
 
 /**
  * Represents a textual view of a story player application, where the user's story library and
- * current story interactions can be displayed.
+ * current story interactions, as the current story choice, can be displayed.
  */
-public class TextView implements StoryPlayerView {
+public class PlayerTextView implements LibraryApplicationView {
 
   private final Appendable destination;
   private final StoryPlayerModelState<?> modelState;
 
   /**
-   * Constructs a {@code TextView} that renders to the given destination.
+   * Constructs a {@code PlayerTextView} that renders information about the given model state to the
+   * given destination.
    *
+   * @param modelState  the state of the model
    * @param destination the destination to render to
    * @throws IllegalArgumentException if the destination is null
    */
-  public TextView(StoryPlayerModelState<?> modelState, Appendable destination)
+  public PlayerTextView(StoryPlayerModelState<?> modelState, Appendable destination)
       throws IllegalArgumentException {
     Utils.ensureNotNull(modelState, "Model state can't be null");
     Utils.ensureNotNull(destination, "Destination can't be null");

@@ -1,6 +1,5 @@
 package controller;
 
-import controller.AbstractController;
 import controller.command.Command;
 import controller.command.ExportStory;
 import controller.command.IOCommand;
@@ -17,12 +16,12 @@ import java.util.function.Supplier;
 import model.StoryPlayerModel;
 import model.game.StoryGame;
 import utils.Utils;
-import view.StoryPlayerView;
-import view.TextView;
+import view.LibraryApplicationView;
+import view.PlayerTextView;
 
 /**
  * Represents a controller for an application that allows users to play stories by controlling a
- * {@link StoryPlayerModel} and a {@link StoryPlayerView}. Supports importing, exporting, and
+ * {@link StoryPlayerModel} and a {@link LibraryApplicationView}. Supports importing, exporting, and
  * playing through, restarting, quitting, and removing stories.
  */
 public class PlayerController extends AbstractController {
@@ -46,7 +45,7 @@ public class PlayerController extends AbstractController {
   public PlayerController(StoryPlayerModel<StoryGame> model, Readable readable,
       Appendable appendable)
       throws IllegalArgumentException {
-    super(new TextView(model, appendable), readable);
+    super(new PlayerTextView(model, appendable), readable);
     this.model = model;
     this.knownCommands = new HashMap<>();
     this.ioCommands = new HashMap<>();

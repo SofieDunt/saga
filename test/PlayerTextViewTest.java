@@ -7,19 +7,19 @@ import model.StoryPlayerModel;
 import model.game.StoryGame;
 import org.junit.Before;
 import org.junit.Test;
-import view.StoryPlayerView;
-import view.TextView;
+import view.LibraryApplicationView;
+import view.PlayerTextView;
 
 /**
- * Tests for {@link view.TextView}s.
+ * Tests for {@link PlayerTextView}s.
  */
-public class TextViewTest {
+public class PlayerTextViewTest {
 
   private final StoryPlayerModel<StoryGame> model = new SimpleStoryPlayerModel();
   private final StoryGame goRight = TestDataProvider.goRight();
   private final StoryGame strength = TestDataProvider.strengthStory();
   private final Appendable appendable = new StringBuilder();
-  private final StoryPlayerView view = new TextView(model, appendable);
+  private final LibraryApplicationView view = new PlayerTextView(model, appendable);
 
   @Before
   public void initData() {

@@ -3,20 +3,20 @@ package view;
 import java.io.IOException;
 
 /**
- * An interface for a view for a story player application that can display the current story library
- * and the story being played.
+ * An interface for a view for an application that manages some library and processes one record of
+ * the library at a time.
  */
-public interface StoryPlayerView {
+public interface LibraryApplicationView {
 
   /**
-   * Render the current choice of the story being played to the provided data destination.
+   * Render the current record to the data destination.
    *
    * @throws IOException if transmission to the data destination fails
    */
   void renderCurrent() throws IOException;
 
   /**
-   * Render the user's story library to the provided data destination.
+   * Render the library to the data destination.
    *
    * @throws IOException if transmission to the data destination fails
    */

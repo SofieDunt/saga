@@ -9,7 +9,7 @@ import model.SimpleStoryPlayerModel;
 import model.StoryPlayerModel;
 import model.game.StoryGame;
 import org.junit.Test;
-import view.TextView;
+import view.PlayerTextView;
 
 /**
  * Tests to ensure failed IO processes are handled correctly by the controller.
@@ -89,7 +89,7 @@ public class BadIOControllerTests {
      */
     public BadController(Appendable appendable, Readable readable)
         throws IllegalArgumentException {
-      super(new TextView(new SimpleStoryPlayerModel(), appendable), readable);
+      super(new PlayerTextView(new SimpleStoryPlayerModel(), appendable), readable);
     }
 
     @Override
