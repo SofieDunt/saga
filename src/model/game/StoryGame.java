@@ -41,4 +41,12 @@ public interface StoryGame {
    * @return the statuses
    */
   Map<String, Integer> getStatuses();
+
+  /**
+   * Returns a copy of the story where no progress has been made. Does not impact the current status
+   * of the story.
+   *
+   * @return a copy of the story, not started
+   */
+  StoryGame getOriginalStory();
 }

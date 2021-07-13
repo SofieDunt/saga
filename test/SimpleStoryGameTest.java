@@ -1,7 +1,12 @@
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
+import model.game.SimpleChoice;
+import model.game.SimpleStoryGame;
 import model.game.StoryGame;
 import org.junit.Test;
 
@@ -12,6 +17,31 @@ public class SimpleStoryGameTest {
 
   private final StoryGame goRight = TestDataProvider.goRight();
   private final StoryGame strengthStory = TestDataProvider.strengthStory();
+
+  @Test
+  public void testStandardConstructor() {
+    Map<String, Integer> map1 = new HashMap<>();
+    map1.put("hello", 0);
+    map1.put("world", 1);
+    StoryGame story = new SimpleStoryGame("story", SimpleChoice.endChoice(), map1);
+    assertEquals(2, story.getStatuses().size());
+    assertEquals(0, (int) story.getStatuses().get("hello"));
+    assertEquals(1, (int) story.getStatuses().get("world"));
+    assertNotSame(map1, story.getStatuses());
+  }
+
+  @Test
+  public void testCopyConstructor() {
+    goRight.next(1);
+    StoryGame copy = new SimpleStoryGame(goRight);
+    assertEquals("Go Right!", copy.getName());
+    assertEquals("Go right(1), Go left(2), or Go straight(3)",
+        copy.getCurrentChoice().toString());
+    assertEquals(1, (int) copy.getStatuses().get("numLefts"));
+    assertEquals(0, (int) copy.getOriginalStory().getStatuses().get("numLefts"));
+    assertNotSame(goRight, copy);
+    assertNotSame(goRight.getStatuses(), copy.getStatuses());
+  }
 
   @Test
   public void testToString() {
@@ -75,5 +105,16 @@ public class SimpleStoryGameTest {
 
     goRight.next(0);
     assertFalse(goRight.next(0));
+  }
+
+  @Test
+  public void getOriginalStory() {
+    StoryGame story = TestDataProvider.strengthStory();
+    story.next(0);
+    assertEquals("win", story.getCurrentChoice().toString());
+    assertEquals(
+        "get 1 strength(1), get 2 strength(2), get 3 strength(3), or don't get strength(4)",
+        story.getOriginalStory().getCurrentChoice().toString());
+    assertEquals(0, (int) story.getOriginalStory().getStatuses().get("strength"));
   }
 }

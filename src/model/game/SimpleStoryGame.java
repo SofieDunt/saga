@@ -18,6 +18,7 @@ public class SimpleStoryGame implements StoryGame {
   // a record of all choices made in the story, where the choice at the top of the list is the
   // choice currently being made
   private final List<Choice> choices;
+  private final Map<String, Integer> originalStatuses;
   private final Map<String, Integer> statuses;
 
   /**
@@ -33,8 +34,34 @@ public class SimpleStoryGame implements StoryGame {
     this.name = Utils.ensureNotNull(name, "Name can't be null!");
     this.choices = new ArrayList<>(
         Collections.singletonList(Utils.ensureNotNull(choice, "Decision can't be null!")));
+    this.originalStatuses = new HashMap<>();
     this.statuses = new HashMap<>();
     for (Entry<String, Integer> status : statuses.entrySet()) {
+      if (status.getValue() != null) {
+        this.originalStatuses.put(status.getKey(), status.getValue());
+        this.statuses.put(status.getKey(), status.getValue());
+      }
+    }
+  }
+
+  /**
+   * Constructs a copy {@code SimpleStoryGame} instance of the given story game.
+   *
+   * @param story the story to copy
+   * @throws IllegalArgumentException the given story is null
+   */
+  public SimpleStoryGame(StoryGame story) throws IllegalArgumentException {
+    Utils.ensureNotNull(story, "Story can't be null");
+    this.name = story.getName();
+    this.choices = Collections.singletonList(story.getCurrentChoice());
+    this.originalStatuses = new HashMap<>();
+    for (Entry<String, Integer> status : story.getOriginalStory().getStatuses().entrySet()) {
+      if (status.getValue() != null) {
+        this.originalStatuses.put(status.getKey(), status.getValue());
+      }
+    }
+    this.statuses = new HashMap<>();
+    for (Entry<String, Integer> status : story.getStatuses().entrySet()) {
       if (status.getValue() != null) {
         this.statuses.put(status.getKey(), status.getValue());
       }
@@ -69,5 +96,10 @@ public class SimpleStoryGame implements StoryGame {
   @Override
   public Map<String, Integer> getStatuses() {
     return this.statuses;
+  }
+
+  @Override
+  public StoryGame getOriginalStory() {
+    return new SimpleStoryGame(this.name, this.choices.get(0), this.originalStatuses);
   }
 }
