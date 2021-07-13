@@ -15,7 +15,7 @@ public class TextView implements StoryPlayerView {
   private final StoryPlayerModelState<?> modelState;
 
   /**
-   * Constructs a {@code TextImageProcessingView} that renders to the given destination.
+   * Constructs a {@code TextView} that renders to the given destination.
    *
    * @param destination the destination to render to
    * @throws IllegalArgumentException if the destination is null

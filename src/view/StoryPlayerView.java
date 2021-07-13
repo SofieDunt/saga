@@ -11,14 +11,14 @@ public interface StoryPlayerView {
   /**
    * Render the current choice of the story being played to the provided data destination.
    *
-   * @throws IOException if transmission of the image to the data destination fails
+   * @throws IOException if transmission to the data destination fails
    */
   void renderCurrent() throws IOException;
 
   /**
    * Render the user's story library to the provided data destination.
    *
-   * @throws IOException if transmission of the library to the data destination fails
+   * @throws IOException if transmission to the data destination fails
    */
   void renderLibrary() throws IOException;
 
@@ -26,7 +26,7 @@ public interface StoryPlayerView {
    * Render a specific message to the provided data destination.
    *
    * @param message the message to render
-   * @throws IOException if transmission of the message to the data destination fails
+   * @throws IOException if transmission to the data destination fails
    */
   void renderMessage(String message) throws IOException;
 }
