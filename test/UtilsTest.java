@@ -70,29 +70,29 @@ public class UtilsTest {
   }
 
   @Test
-  public void isNonNegativeStringNumber() {
+  public void isPositiveStringNumber() {
     // Null string
-    assertFalse(Utils.isNonNegativeStringNumber(null));
+    assertFalse(Utils.isPositiveStringNumber(null));
     // Empty string
-    assertFalse(Utils.isNonNegativeStringNumber(""));
+    assertFalse(Utils.isPositiveStringNumber(""));
     // True
-    assertTrue(Utils.isNonNegativeStringNumber("1"));
-    assertTrue(Utils.isNonNegativeStringNumber("01234"));
+    assertTrue(Utils.isPositiveStringNumber("1"));
+    assertTrue(Utils.isPositiveStringNumber("01234"));
     // Zero
-    assertTrue(Utils.isNonNegativeStringNumber("0"));
-    assertTrue(Utils.isNonNegativeStringNumber("00000000"));
+    assertFalse(Utils.isPositiveStringNumber("0"));
+    assertFalse(Utils.isPositiveStringNumber("00000000"));
     // False
-    assertFalse(Utils.isNonNegativeStringNumber(" 123"));
-    assertFalse(Utils.isNonNegativeStringNumber("1 23"));
-    assertFalse(Utils.isNonNegativeStringNumber("12 3"));
-    assertFalse(Utils.isNonNegativeStringNumber("123 "));
-    assertFalse(Utils.isNonNegativeStringNumber("abcd"));
-    assertFalse(Utils.isNonNegativeStringNumber("CBA"));
-    assertFalse(Utils.isNonNegativeStringNumber("12a3"));
-    assertFalse(Utils.isNonNegativeStringNumber("123a"));
-    assertFalse(Utils.isNonNegativeStringNumber("-1"));
-    assertFalse(Utils.isNonNegativeStringNumber("-123"));
-    assertFalse(Utils.isNonNegativeStringNumber("1.0"));
-    assertFalse(Utils.isNonNegativeStringNumber("1,000"));
+    assertFalse(Utils.isPositiveStringNumber(" 123"));
+    assertFalse(Utils.isPositiveStringNumber("1 23"));
+    assertFalse(Utils.isPositiveStringNumber("12 3"));
+    assertFalse(Utils.isPositiveStringNumber("123 "));
+    assertFalse(Utils.isPositiveStringNumber("abcd"));
+    assertFalse(Utils.isPositiveStringNumber("CBA"));
+    assertFalse(Utils.isPositiveStringNumber("12a3"));
+    assertFalse(Utils.isPositiveStringNumber("123a"));
+    assertFalse(Utils.isPositiveStringNumber("-1"));
+    assertFalse(Utils.isPositiveStringNumber("-123"));
+    assertFalse(Utils.isPositiveStringNumber("1.0"));
+    assertFalse(Utils.isPositiveStringNumber("1,000"));
   }
 }
