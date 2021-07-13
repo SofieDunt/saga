@@ -44,4 +44,24 @@ public class Utils {
     }
     return list;
   }
+
+  /**
+   * Checks if the given string can be translated into a valid non-negative string number - that is,
+   * it is a non-empty string made up of only characters that represent numbers. ({@code "1.0"},
+   * {@code "-1"}, and {@code "1,000"} are invalid)
+   *
+   * @param proposedNumber the string to check
+   * @return true if a valid non-negative number, false if null/otherwise
+   */
+  public static boolean isNonNegativeStringNumber(String proposedNumber) {
+    if (proposedNumber == null || proposedNumber.length() == 0) {
+      return false;
+    }
+
+    try {
+      return Integer.parseInt(proposedNumber) > -1;
+    } catch (NumberFormatException e) {
+      return false;
+    }
+  }
 }
