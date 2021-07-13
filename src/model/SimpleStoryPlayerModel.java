@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import model.game.SimpleStoryGame;
 import model.game.StoryGame;
 import utils.Utils;
@@ -50,16 +51,26 @@ public class SimpleStoryPlayerModel implements StoryPlayerModel<StoryGame> {
 
   @Override
   public boolean next(int decision) throws IllegalArgumentException, IllegalStateException {
-    if (this.currentStory != null) {
-      return this.currentStory.next(decision);
-    } else {
-      throw new IllegalStateException("No loaded story!");
-    }
+    ensureStoryLoaded();
+    return this.currentStory.next(decision);
   }
 
   @Override
   public void quitStory() {
     this.currentStory = null;
+  }
+
+  @Override
+  public void restart() {
+    ensureStoryLoaded();
+
+    for (Entry<String, StoryGame> entry : this.storyLibrary.entrySet()) {
+      if (entry.getValue().equals(this.currentStory)) {
+        this.storyLibrary.replace(entry.getKey(), this.currentStory.getOriginalStory());
+        this.currentStory = this.storyLibrary.get(entry.getKey());
+        break;
+      }
+    }
   }
 
   @Override
@@ -105,6 +116,17 @@ public class SimpleStoryPlayerModel implements StoryPlayerModel<StoryGame> {
       return this.storyLibrary.get(name);
     } else {
       throw new IllegalArgumentException("No story \"" + name + "\" found");
+    }
+  }
+
+  /**
+   * Ensures a story is currently loaded.
+   *
+   * @throws IllegalStateException if no story is loaded
+   */
+  private void ensureStoryLoaded() throws IllegalStateException {
+    if (this.currentStory == null) {
+      throw new IllegalStateException("No loaded story!");
     }
   }
 

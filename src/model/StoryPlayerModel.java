@@ -50,4 +50,12 @@ public interface StoryPlayerModel<K> extends StoryPlayerModelState<K> {
    * Quits the given story, saving progress. Does nothing if no story is loaded.
    */
   void quitStory();
+
+  /**
+   * Restarts the loaded story, reverting to the original version of the story as it was first added
+   * to the library. The restarted story is the loaded story.
+   *
+   * @throws IllegalStateException if no story is loaded
+   */
+  void restart() throws IllegalStateException;
 }

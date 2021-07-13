@@ -189,6 +189,16 @@ public class SimpleStoryPlayerModelTest {
   }
 
   @Test
+  public void restart() {
+    model.playStory("Go Right!");
+    model.next(1);
+    model.restart();
+    assertEquals(0, (int) model.getStory("Go Right!").getStatuses().get("numLefts"));
+    model.next(0);
+    assertEquals("Game over, no choices left.", model.getCurrentChoice());
+  }
+
+  @Test
   public void getStory() {
     StoryGame retrieved = model.getStory("Go Right!");
     assertNotSame(goRight, retrieved);
