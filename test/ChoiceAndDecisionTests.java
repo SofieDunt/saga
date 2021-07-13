@@ -196,19 +196,19 @@ public abstract class ChoiceAndDecisionTests {
     } catch (IllegalArgumentException e) {
       msg = e.getMessage();
     }
-    assertEquals("No choice -1", msg);
+    assertEquals("No choice 0", msg);
     try {
       toEndChoice.choose(1, story);
     } catch (IllegalArgumentException e) {
       msg = e.getMessage();
     }
-    assertEquals("No choice 1", msg);
+    assertEquals("No choice 2", msg);
     try {
       endChoice.choose(0, story);
     } catch (IllegalArgumentException e) {
       msg = e.getMessage();
     }
-    assertEquals("No choice 0", msg);
+    assertEquals("No choice 1", msg);
   }
 
   // EXPORT DECISION TESTS

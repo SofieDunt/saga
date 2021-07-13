@@ -58,7 +58,7 @@ public class SimpleChoice implements Choice {
   @Override
   public Choice choose(int decision, StoryGame story) throws IllegalArgumentException {
     if (decision < 0 || decision > this.options.size() - 1) {
-      throw new IllegalArgumentException("No choice " + decision);
+      throw new IllegalArgumentException("No choice " + (decision + 1));
     }
     return this.options.get(decision)
         .makeDecision(Utils.ensureNotNull(story, "Story can't be null!"));

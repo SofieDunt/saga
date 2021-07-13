@@ -94,14 +94,14 @@ public class SimpleStoryGameTest {
     } catch (IllegalArgumentException e) {
       msg = e.getMessage();
     }
-    assertEquals("No choice -1", msg);
+    assertEquals("No choice 0", msg);
     msg = "noException";
     try {
       goRight.next(3);
     } catch (IllegalArgumentException e) {
       msg = e.getMessage();
     }
-    assertEquals("No choice 3", msg);
+    assertEquals("No choice 4", msg);
 
     goRight.next(0);
     assertFalse(goRight.next(0));
