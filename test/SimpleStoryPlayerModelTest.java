@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import model.SimpleStoryPlayerModel;
 import model.StoryPlayerModel;
