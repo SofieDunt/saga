@@ -1,14 +1,10 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import model.game.SimpleStoryGame;
 import model.game.StoryGame;
-import utils.Utils;
+import utils.Library;
+import utils.MapLibrary;
 
 /**
  * Represents a model for a choose-your-own-adventure story application which keeps track of a
@@ -17,28 +13,28 @@ import utils.Utils;
  */
 public class SimpleStoryPlayerModel implements StoryPlayerModel<StoryGame> {
 
-  // the name/alias-story map representing the user's library
-  private final Map<String, StoryGame> storyLibrary;
-  private StoryGame currentStory; // the current loaded story from the library, null if none loaded
+  // the user's library
+  private final Library<StoryGame> storyLibrary;
+  private String currentStory; // name of the current loaded story from the library, null if none loaded
 
   /**
    * Constructs a {@code SimpleStoryPlayerModel} with an empty library.
    */
   public SimpleStoryPlayerModel() {
-    this.storyLibrary = new HashMap<>();
+    this.storyLibrary = new MapLibrary<>(s -> "Can't add null", s -> "No story \"" + s + "\" found",
+        s -> s + " already exists");
     this.currentStory = null;
   }
 
   @Override
   public void addStory(StoryGame story) throws IllegalArgumentException {
-    Utils.ensureNotNull(story, "Can't add null story!");
-    this.storyLibrary.put(createValidName(story.getName()), story);
+    this.storyLibrary.add(story.getName(), story);
   }
 
   @Override
   public void removeStory(String name) throws IllegalArgumentException {
-    ensureStoryExists(name);
-    if (this.currentStory != null && this.currentStory.getName().equals(name)) {
+    this.storyLibrary.retrieve(name);
+    if (this.currentStory != null && this.currentStory.equals(name)) {
       this.currentStory = null;
     }
     this.storyLibrary.remove(name);
@@ -46,13 +42,14 @@ public class SimpleStoryPlayerModel implements StoryPlayerModel<StoryGame> {
 
   @Override
   public void playStory(String name) throws IllegalArgumentException {
-    this.currentStory = ensureStoryExists(name);
+    this.storyLibrary.retrieve(name);
+    this.currentStory = name;
   }
 
   @Override
   public boolean next(int decision) throws IllegalArgumentException, IllegalStateException {
     ensureStoryLoaded();
-    return this.currentStory.next(decision);
+    return this.storyLibrary.retrieve(this.currentStory).next(decision);
   }
 
   @Override
@@ -63,29 +60,19 @@ public class SimpleStoryPlayerModel implements StoryPlayerModel<StoryGame> {
   @Override
   public void restart() {
     ensureStoryLoaded();
-
-    for (Entry<String, StoryGame> entry : this.storyLibrary.entrySet()) {
-      if (entry.getValue().equals(this.currentStory)) {
-        this.storyLibrary.replace(entry.getKey(), this.currentStory.getOriginalStory());
-        this.currentStory = this.storyLibrary.get(entry.getKey());
-        break;
-      }
-    }
+    StoryGame original = this.storyLibrary.retrieve(this.currentStory).getOriginalStory();
+    this.storyLibrary.update(this.currentStory, original);
   }
 
   @Override
   public String getCurrentStoryName() {
-    if (this.currentStory != null) {
-      return this.currentStory.getName();
-    } else {
-      return null;
-    }
+    return this.currentStory;
   }
 
   @Override
   public String getCurrentChoice() {
     if (this.currentStory != null) {
-      return this.currentStory.getCurrentChoice().toString();
+      return this.storyLibrary.retrieve(this.currentStory).getCurrentChoice().toString();
     } else {
       return null;
     }
@@ -93,30 +80,13 @@ public class SimpleStoryPlayerModel implements StoryPlayerModel<StoryGame> {
 
   @Override
   public List<String> getAllStoryNames() {
-    List<String> allTitles = new ArrayList<>(this.storyLibrary.keySet());
-    Collections.sort(allTitles);
-    return allTitles;
+    return this.storyLibrary.getAllNames();
   }
 
   @Override
   public StoryGame getStory(String name) throws IllegalArgumentException {
-    StoryGame original = ensureStoryExists(name);
+    StoryGame original = this.storyLibrary.retrieve(name);
     return new SimpleStoryGame(original);
-  }
-
-  /**
-   * Ensures the named story exists in the library.
-   *
-   * @param name the name of the story
-   * @return the story of the given name
-   * @throws IllegalArgumentException if no story of the given name exists, or the name is null
-   */
-  private StoryGame ensureStoryExists(String name) throws IllegalArgumentException {
-    if (name != null && this.storyLibrary.containsKey(name)) {
-      return this.storyLibrary.get(name);
-    } else {
-      throw new IllegalArgumentException("No story \"" + name + "\" found");
-    }
   }
 
   /**
@@ -128,27 +98,5 @@ public class SimpleStoryPlayerModel implements StoryPlayerModel<StoryGame> {
     if (this.currentStory == null) {
       throw new IllegalStateException("No loaded story!");
     }
-  }
-
-  /**
-   * Creates a valid name (unique in the story library) from the given name by adding a number after
-   * it.
-   *
-   * @param preferredName the given name
-   * @return the valid name
-   */
-  private String createValidName(String preferredName) {
-    if (preferredName == null) {
-      preferredName = "Untitled";
-    }
-
-    String validName = preferredName;
-    int increment = 0;
-    while (this.storyLibrary.containsKey(validName)) {
-      increment++;
-      validName = preferredName + "(" + increment + ")";
-    }
-
-    return validName;
   }
 }
