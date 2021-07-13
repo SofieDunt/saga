@@ -13,7 +13,7 @@ import utils.Utils;
  * user's stories and allows them to select and play any story in their library and add stories to
  * or remove stories from their library.
  */
-public class SimpleStoryPlayerModel implements StoryPlayerModel {
+public class SimpleStoryPlayerModel implements StoryPlayerModel<StoryGame> {
 
   // the name/alias-story map representing the user's library
   private final Map<String, StoryGame> storyLibrary;

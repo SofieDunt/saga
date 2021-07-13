@@ -1,12 +1,12 @@
 package model;
 
-import model.game.StoryGame;
-
 /**
  * An interface of a model for a choose-your-own-adventure story application in which a user can
  * load and play a story in their library.
+ *
+ * @param <K> the type of story model representing stories in the library
  */
-public interface StoryPlayerModel extends StoryPlayerModelState {
+public interface StoryPlayerModel<K> extends StoryPlayerModelState {
 
   /**
    * Adds the given story to the user's library, renaming it in the library if a story of that name
@@ -17,7 +17,7 @@ public interface StoryPlayerModel extends StoryPlayerModelState {
    * @param story the story to add to the library
    * @throws IllegalArgumentException if the given story is null
    */
-  void addStory(StoryGame story) throws IllegalArgumentException;
+  void addStory(K story) throws IllegalArgumentException;
 
   /**
    * Removes the given story from the user's library.
