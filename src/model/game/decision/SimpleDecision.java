@@ -1,5 +1,9 @@
 package model.game.decision;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import model.game.Choice;
 import model.game.StoryGame;
 import utils.Utils;
@@ -33,6 +37,21 @@ public class SimpleDecision implements Decision {
   public Choice makeDecision(StoryGame story) throws IllegalArgumentException {
     Utils.ensureNotNull(story, "Story can't be null!");
     return this.outcome;
+  }
+
+  @Override
+  public String export(Map<Choice, String> choiceRepresentations) throws IllegalArgumentException {
+    Utils.ensureNotNull(choiceRepresentations, "Map can't be null");
+    if (!choiceRepresentations.containsKey(this.outcome)) {
+      throw new IllegalArgumentException("Map doesn't contain outcome");
+    }
+
+    return DecisionTypes.SIMPLE + " \"" + this.description + "\" " + choiceRepresentations.get(this.outcome);
+  }
+
+  @Override
+  public List<Choice> getPossibleOutcomes() {
+    return new ArrayList<>(Collections.singletonList(this.outcome));
   }
 }
 

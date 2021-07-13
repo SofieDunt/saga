@@ -47,9 +47,13 @@ public class SimpleStoryGame implements StoryGame {
   }
 
   @Override
-  public void next(int decision) throws IllegalArgumentException, IllegalStateException {
-    ensureNotFinished();
-    this.choices.add(getCurrentChoice().choose(decision, this));
+  public boolean next(int decision) throws IllegalArgumentException, IllegalStateException {
+    if (getCurrentChoice().getOptions().size() == 0) {
+      return false;
+    } else {
+      this.choices.add(getCurrentChoice().choose(decision, this));
+      return true;
+    }
   }
 
   @Override
@@ -65,16 +69,5 @@ public class SimpleStoryGame implements StoryGame {
   @Override
   public Map<String, Integer> getStatuses() {
     return this.statuses;
-  }
-
-  /**
-   * Ensures the story has not yet been finished.
-   *
-   * @throws IllegalStateException if the story has been finished
-   */
-  private void ensureNotFinished() throws IllegalStateException {
-    if (getCurrentChoice().getOptions().size() == 0) {
-      throw new IllegalStateException("The story has been completed!");
-    }
   }
 }

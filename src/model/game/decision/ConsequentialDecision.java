@@ -3,8 +3,9 @@ package model.game.decision;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import model.game.Choice;
-import model.game.StatusUpdate;
+import model.game.statusUpdate.StatusUpdate;
 import model.game.StoryGame;
 import utils.Utils;
 
@@ -53,5 +54,29 @@ public class ConsequentialDecision extends SimpleDecision {
       }
     }
     return this.outcome;
+  }
+
+  @Override
+  public String export(Map<Choice, String> choiceRepresentations) {
+    Utils.ensureNotNull(choiceRepresentations, "Map can't be null");
+    if (!choiceRepresentations.containsKey(this.outcome)) {
+      throw new IllegalArgumentException("Map doesn't contain outcome");
+    }
+
+    StringBuilder sb = new StringBuilder(DecisionTypes.CONSEQUENTIAL.toString()).append(" \"")
+        .append(this.description)
+        .append("\" [ ");
+
+    int i = 0;
+    Set<String> keys = this.statusUpdates.keySet();
+    for (String status : keys) {
+      sb.append(this.statusUpdates.get(status).export()).append(" \"").append(status).append("\" ");
+      if (keys.size() > 0 && i < keys.size() - 1) {
+        sb.append("| ");
+      }
+      i++;
+    }
+    sb.append("] ").append(choiceRepresentations.get(this.outcome));
+    return sb.toString();
   }
 }

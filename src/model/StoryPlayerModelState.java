@@ -25,7 +25,7 @@ public interface StoryPlayerModelState {
   /**
    * Gets the names of all stories in the user's library.
    *
-   * @return
+   * @return all story names in the library
    */
   List<String> getAllStoryNames();
 }

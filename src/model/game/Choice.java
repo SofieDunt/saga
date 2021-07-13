@@ -1,6 +1,7 @@
 package model.game;
 
 import java.util.List;
+import model.game.decision.Decision;
 
 /**
  * An interface for a choice to be made in the story, a point where a user must direct the flow of
@@ -29,9 +30,9 @@ public interface Choice {
   Choice choose(int decision, StoryGame story) throws IllegalArgumentException;
 
   /**
-   * Returns a list of the descriptions of each decision option for the choice.
+   * Returns a list of each decision option for the choice.
    *
-   * @return the list of decision descriptions
+   * @return the list of decisions
    */
-  List<String> getOptions();
+  List<Decision> getOptions();
 }

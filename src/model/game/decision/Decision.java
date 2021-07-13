@@ -1,5 +1,7 @@
 package model.game.decision;
 
+import java.util.List;
+import java.util.Map;
 import model.game.Choice;
 import model.game.StoryGame;
 
@@ -25,4 +27,20 @@ public interface Decision {
    * @throws IllegalArgumentException if the given story is null
    */
   Choice makeDecision(StoryGame story) throws IllegalArgumentException;
+
+  /**
+   * Returns the decision as a string of a known format to use in exporting stories.
+   *
+   * @param choiceRepresentations a map of choices to how those choices should be represented
+   * @return the formatted string decision
+   * @throws IllegalArgumentException if the map is null or does not contain all of the decision's
+   *                                  outcomes
+   */
+  String export(Map<Choice, String> choiceRepresentations) throws IllegalArgumentException;
+
+  /**
+   * Returns a list of all of the decision's possible outcomes.
+   * @return the list of choice outcomes
+   */
+  List<Choice> getPossibleOutcomes();
 }

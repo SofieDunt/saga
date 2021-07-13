@@ -1,5 +1,6 @@
 package model.game.decision;
 
+import java.util.List;
 import java.util.Map;
 import model.game.Choice;
 
@@ -18,4 +19,20 @@ public interface OutcomeDeterminer {
    *                                  is null)
    */
   Choice getOutcome(Map<String, Integer> statuses) throws IllegalArgumentException;
+
+  /**
+   * Returns the determiner as a string of a known format to use in exporting stories.
+   *
+   * @param choiceRepresentations a map of choices to how those choices should be represented
+   * @return the formatted string determiner
+   * @throws IllegalArgumentException if the map is null or does not contain all of the determiner's
+   *                                  outcomes
+   */
+  String export(Map<Choice, String> choiceRepresentations) throws IllegalArgumentException;
+
+  /**
+   * Returns a list of all the outcomes the determiner chooses between.
+   * @return the list of possible choice outcomes
+   */
+  List<Choice> getPossibleOutcomes();
 }

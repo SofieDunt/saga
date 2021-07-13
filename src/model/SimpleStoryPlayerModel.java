@@ -54,9 +54,9 @@ public class SimpleStoryPlayerModel implements StoryPlayerModel {
   }
 
   @Override
-  public void next(int decision) throws IllegalArgumentException, IllegalStateException {
+  public boolean next(int decision) throws IllegalArgumentException, IllegalStateException {
     if (this.currentStory != null) {
-      this.currentStory.next(decision);
+      return this.currentStory.next(decision);
     } else {
       throw new IllegalStateException("No loaded story!");
     }

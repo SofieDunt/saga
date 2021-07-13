@@ -3,10 +3,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import model.game.decision.TwoThresholdDeterminer;
+import model.game.statusUpdate.AddStatus;
 import model.game.Choice;
 import model.game.SimpleChoice;
 import model.game.SimpleStoryGame;
-import model.game.StatusUpdate;
+import model.game.statusUpdate.StatusUpdate;
 import model.game.StoryGame;
 import model.game.decision.ConsequentialDecision;
 import model.game.decision.Decision;
@@ -29,7 +31,7 @@ public class TestDataProvider {
     List<Decision> choices = new ArrayList<>(Collections.singletonList(rightDecision));
     Choice directionChoice = new SimpleChoice(choices);
     Map<String, StatusUpdate> updateLeftCount = new HashMap<>();
-    updateLeftCount.put("numLefts", (int i) -> i + 1);
+    updateLeftCount.put("numLefts", new AddStatus(1));
     choices.add(new ConsequentialDecision("Go left", directionChoice, updateLeftCount));
 
     return directionChoice;
@@ -45,10 +47,10 @@ public class TestDataProvider {
     List<Decision> choices = new ArrayList<>(Collections.singletonList(rightDecision));
     Choice directionChoice = new SimpleChoice(choices);
     Map<String, StatusUpdate> updateLeftCount = new HashMap<>();
-    updateLeftCount.put("numLefts", (int i) -> i + 1);
+    updateLeftCount.put("numLefts", new AddStatus(1));
     choices.add(new ConsequentialDecision("Go left", directionChoice, updateLeftCount));
     Map<String, StatusUpdate> updateStraightCount = new HashMap<>();
-    updateStraightCount.put("numStraights", (int i) -> i + 1);
+    updateStraightCount.put("numStraights", new AddStatus(1));
     choices.add(new ConsequentialDecision("Go straight", directionChoice, updateStraightCount));
 
     return directionChoice;
@@ -68,21 +70,28 @@ public class TestDataProvider {
   }
 
   /**
-   * Represents a story game that uses dependent decisions, which ends if a user chooses "strength"
-   * or later quits.
+   * Represents a story game that uses dependent decisions, whose ending is dependent on a user's
+   * strength, which is determined by their choice.
    *
    * @return the story object
    */
   public static StoryGame strengthStory() {
+    OutcomeDeterminer determiner = endDeterminer();
+    List<Decision> options = new ArrayList<>();
+    Choice getStrengthChoice = new SimpleChoice(options);
     Map<String, StatusUpdate> updateMap = new HashMap<>();
-    List<Decision> choices = new ArrayList<>();
-    Choice getStrengthChoice = new SimpleChoice(choices);
-    updateMap.put("strength", (i) -> i + 1);
-    choices.add(new DependentDecision("get strength", updateMap, getDeterminer()));
-    choices.add(new DependentDecision("don't get strength", getDeterminer()));
+    updateMap.put("strength", new AddStatus(1));
+    options.add(new DependentDecision("get 1 strength", updateMap, determiner));
+    Map<String, StatusUpdate> updateMap2 = new HashMap<>();
+    updateMap2.put("strength", new AddStatus(2));
+    options.add(new DependentDecision("get 2 strength", updateMap2, determiner));
+    Map<String, StatusUpdate> updateMap3 = new HashMap<>();
+    updateMap3.put("strength", new AddStatus(2));
+    options.add(new DependentDecision("get 3 strength", updateMap3, determiner));
+    options.add(new DependentDecision("don't get strength", determiner));
 
     Map<String, Integer> statuses = new HashMap<>();
-    statuses.put("strength", -1);
+    statuses.put("strength", 0);
     return new SimpleStoryGame("Strength!", getStrengthChoice, statuses);
   }
 
@@ -92,25 +101,12 @@ public class TestDataProvider {
    *
    * @return the determiner object
    */
-  public static OutcomeDeterminer getDeterminer() {
-    return statuses -> {
-      if (statuses.containsKey("strength")) {
-        if (statuses.get("strength") > 0) {
-          return SimpleChoice.endChoice();
-        } else {
-          List<Decision> choices = new ArrayList<>();
-          Choice quitOrContinue = new SimpleChoice(choices);
-          Map<String, StatusUpdate> addStrength = new HashMap<>();
-          addStrength.put("strength", (i) -> i + 1);
-          choices.add(new DependentDecision(
-              new ConsequentialDecision("continue", quitOrContinue, addStrength),
-              getDeterminer()));
-          choices.add(new SimpleDecision("quit", SimpleChoice.endChoice()));
-          return quitOrContinue;
-        }
-      } else {
-        throw new IllegalArgumentException("No such status strength");
-      }
-    };
+  public static OutcomeDeterminer endDeterminer() {
+    Choice win = new SimpleChoice(new ArrayList<>(
+        Collections.singletonList(new SimpleDecision("win", SimpleChoice.endChoice()))));
+    Choice lose = new SimpleChoice(new ArrayList<>(
+        Collections.singletonList(new SimpleDecision("lose", SimpleChoice.endChoice()))));
+
+    return new TwoThresholdDeterminer("strength", 2, win, lose);
   }
 }

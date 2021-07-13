@@ -1,0 +1,12 @@
+"Go Right!"
+[ "numLefts" 1 "numStraights" 1 ]
+2
+{
+[ SIMPLE "Go right" C1 ]
+[ CONSEQUENTIAL "Go left" [ ADD 1 numLefts ] ]
+[ CONSEQUENTIAL "Go straight" [ ADD 1 numStraights ] C0 ]
+}
+{
+C0 [ D0 D1 D2 ]
+C1 [ ]
+}

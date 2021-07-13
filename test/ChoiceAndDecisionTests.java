@@ -3,17 +3,17 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import model.game.decision.DependentDecision;
+import model.game.decision.TwoThresholdDeterminer;
+import model.game.statusUpdate.AddStatus;
 import model.game.Choice;
 import model.game.SimpleChoice;
 import model.game.SimpleStoryGame;
-import model.game.StatusUpdate;
+import model.game.statusUpdate.StatusUpdate;
 import model.game.StoryGame;
 import model.game.decision.ConsequentialDecision;
 import model.game.decision.Decision;
-import model.game.decision.DependentDecision;
-import model.game.decision.OutcomeDeterminer;
 import model.game.decision.SimpleDecision;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,6 +28,11 @@ public abstract class ChoiceAndDecisionTests {
   protected final Choice toEndChoice = new SimpleChoice(
       new ArrayList<>(Collections.singletonList(endDecision())));
   protected static final Choice endChoice = SimpleChoice.endChoice();
+  private Choice outcome;
+  private Map<Choice, String> choiceMap;
+  private Decision simple;
+  private Map<String, StatusUpdate> consequences;
+  private Decision consequential;
 
   /**
    * Creates a decision that leads to the end for testing.
@@ -67,31 +72,31 @@ public abstract class ChoiceAndDecisionTests {
     @Override
     protected Decision endDecision() {
       Map<String, StatusUpdate> consequences = new HashMap<>();
-      consequences.put("impact1", (i) -> i + 1);
-      consequences.put("impact2", (i) -> i + 2);
+      consequences.put("impact1", new AddStatus(1));
+      consequences.put("impact2", new AddStatus(2));
       return new ConsequentialDecision("End", endChoice, consequences);
     }
 
     @Override
     protected Decision decision() {
       Map<String, StatusUpdate> consequences = new HashMap<>();
-      consequences.put("impact1", (i) -> i - 1);
-      consequences.put("impact2", (i) -> i - 2);
+      consequences.put("impact1", new AddStatus(-1));
+      consequences.put("impact2", new AddStatus(-2));
       return new ConsequentialDecision("Decision", toEndChoice, consequences);
     }
 
     @Test
     public void testConsequentialDecisionConstructorStatusUpdates() {
       Map<String, StatusUpdate> consequences = new HashMap<>();
-      consequences.put("impact1", (i) -> i - 1);
-      consequences.put("impact2", (i) -> i - 2);
+      consequences.put("impact1", new AddStatus(-1));
+      consequences.put("impact2", new AddStatus(-2));
       consequences.put("impact3", null);
       Decision decision = new ConsequentialDecision("Decision", toEndChoice, consequences);
       decision.makeDecision(story); // impact3 does not cause an issue because it was removed
       assertEquals(-1, (int) story.getStatuses().get("impact1"));
       assertEquals(98, (int) story.getStatuses().get("impact2"));
       // impact4 does not cause an issue because it constructor makes a copy
-      consequences.put("impact4", (i) -> i - 4);
+      consequences.put("impact4", new AddStatus(-4));
       decision.makeDecision(story);
       assertEquals(-2, (int) story.getStatuses().get("impact1"));
       assertEquals(96, (int) story.getStatuses().get("impact2"));
@@ -110,9 +115,9 @@ public abstract class ChoiceAndDecisionTests {
     @Test
     public void testMakeConsequentialDecisionNoStatus() {
       Map<String, StatusUpdate> consequences = new HashMap<>();
-      consequences.put("impact1", (i) -> i);
-      consequences.put("impact2", (i) -> i);
-      consequences.put("impact3", (i) -> i);
+      consequences.put("impact1", new AddStatus(0));
+      consequences.put("impact2", new AddStatus(0));
+      consequences.put("impact3", new AddStatus(0));
       Decision decision = new ConsequentialDecision("Decision", toEndChoice, consequences);
 
       String msg = "noException";
@@ -132,6 +137,11 @@ public abstract class ChoiceAndDecisionTests {
     statuses.put("impact2", 100);
     story = new SimpleStoryGame("Story",
         new SimpleChoice(new ArrayList<>(Collections.singletonList(decision()))), statuses);
+    outcome = SimpleChoice.endChoice();
+    choiceMap = new HashMap<>();
+    simple = new SimpleDecision("test", outcome);
+    consequences = new HashMap<>();
+    consequential = new ConsequentialDecision("testC", outcome, consequences);
   }
 
   @Test
@@ -142,46 +152,31 @@ public abstract class ChoiceAndDecisionTests {
 
   @Test
   public void makeDependentDecision() {
-    OutcomeDeterminer determiner = TestDataProvider.getDeterminer();
-    StoryGame storyGame1 = TestDataProvider.strengthStory();
+    StoryGame storyGame = TestDataProvider.strengthStory();
 
-    Map<String, StatusUpdate> updateMap = new HashMap<>();
-    updateMap.put("strength", (i) -> i + 1);
-    assertEquals("continue(1) or quit(2)",
-        new DependentDecision("get strength", updateMap, determiner)
-            .makeDecision(storyGame1).toString());
-    assertEquals("Game over, no choices left.",
-        new DependentDecision("get strength", updateMap, determiner)
-            .makeDecision(storyGame1).toString());
-    assertEquals("continue(1) or quit(2)",
-        new DependentDecision("don't get strength", determiner)
-            .makeDecision(TestDataProvider.strengthStory()).toString());
-
-    List<Decision> choices = new ArrayList<>();
-    Choice getStrengthChoice = new SimpleChoice(choices);
-    updateMap.put("strength", (i) -> i + 1);
-    choices.add(new DependentDecision("get strength", updateMap, determiner));
-    choices.add(new DependentDecision("don't get strength", determiner));
-
-    Map<String, Integer> statuses = new HashMap<>();
-    statuses.put("strength", -5);
-    StoryGame storyGame2 = new SimpleStoryGame("Strength!", getStrengthChoice, statuses);
-    assertEquals("continue(1) or quit(2)",
-        new DependentDecision("get strength", updateMap, determiner)
-            .makeDecision(storyGame2).toString());
-    storyGame2.next(0);
-    for (int i = 0; i < 4; i++) {
-      assertEquals("continue(1) or quit(2)", storyGame2.getCurrentChoice().toString());
-      storyGame2.next(0);
-    }
-    assertEquals("Game over, no choices left.", storyGame2.getCurrentChoice().toString());
+    assertEquals(
+        "get 1 strength(1), get 2 strength(2), get 3 strength(3), or don't get strength(4)",
+        storyGame.getCurrentChoice().toString());
+    storyGame.next(0);
+    assertEquals("win", storyGame.getCurrentChoice().toString());
+    storyGame = TestDataProvider.strengthStory();
+    storyGame.next(1);
+    assertEquals("lose", storyGame.getCurrentChoice().toString());
+    storyGame = TestDataProvider.strengthStory();
+    storyGame.next(2);
+    assertEquals("lose", storyGame.getCurrentChoice().toString());
+    storyGame = TestDataProvider.strengthStory();
+    storyGame.next(3);
+    assertEquals("win", storyGame.getCurrentChoice().toString());
+    storyGame.next(0);
+    assertEquals("Game over, no choices left.", storyGame.getCurrentChoice().toString());
   }
 
   // CHOICES
 
   @Test
   public void choiceToString() {
-    assertEquals("End(1)", toEndChoice.toString());
+    assertEquals("End", toEndChoice.toString());
     assertEquals("Go right(1), Go left(2), or Go straight(3)",
         TestDataProvider.directionChoice().toString());
     assertEquals("Go right(1) or Go left(2)", TestDataProvider.twoDirectionChoice().toString());
@@ -214,5 +209,80 @@ public abstract class ChoiceAndDecisionTests {
       msg = e.getMessage();
     }
     assertEquals("No choice 0", msg);
+  }
+
+  // EXPORT DECISION TESTS
+
+  @Test
+  public void simpleDecision() {
+    String msg = "";
+    try {
+      simple.export(null);
+    } catch (IllegalArgumentException e) {
+      msg = e.getMessage();
+    }
+    assertEquals("Map can't be null", msg);
+    try {
+      simple.export(choiceMap);
+    } catch (IllegalArgumentException e) {
+      msg = e.getMessage();
+    }
+    assertEquals("Map doesn't contain outcome", msg);
+
+    choiceMap.put(outcome, "C0");
+    assertEquals("SIMPLE \"test\" C0", simple.export(choiceMap));
+  }
+
+  @Test
+  public void consequentialDecision() {
+    String msg = "";
+    try {
+      consequential.export(null);
+    } catch (IllegalArgumentException e) {
+      msg = e.getMessage();
+    }
+    assertEquals("Map can't be null", msg);
+    try {
+      consequential.export(choiceMap);
+    } catch (IllegalArgumentException e) {
+      msg = e.getMessage();
+    }
+    assertEquals("Map doesn't contain outcome", msg);
+
+    choiceMap.put(outcome, "C0");
+    assertEquals("CONSEQUENTIAL \"testC\" [ ] C0", consequential.export(choiceMap));
+    consequences.put("point", new AddStatus(2));
+    consequential = new ConsequentialDecision("testC", outcome, consequences);
+    assertEquals("CONSEQUENTIAL \"testC\" [ ADD 2 \"point\" ] C0", consequential.export(choiceMap));
+    consequences.put("point2", new AddStatus(3));
+    consequential = new ConsequentialDecision("testC", outcome, consequences);
+    assertEquals("CONSEQUENTIAL \"testC\" [ ADD 2 \"point\" | ADD 3 \"point2\" ] C0",
+        consequential.export(choiceMap));
+  }
+
+  @Test
+  public void dependentDecision() {
+    Choice outcome2 = SimpleChoice.endChoice();
+    Decision dependent = new DependentDecision("dependent",
+        new TwoThresholdDeterminer("point", 2, outcome, outcome2));
+    choiceMap.put(outcome, "C0");
+
+    String msg = "";
+    try {
+      dependent.export(null);
+    } catch (IllegalArgumentException e) {
+      msg = e.getMessage();
+    }
+    assertEquals("Map can't be null", msg);
+    try {
+      dependent.export(choiceMap);
+    } catch (IllegalArgumentException e) {
+      msg = e.getMessage();
+    }
+    assertEquals("Map doesn't contain all outcomes", msg);
+
+    choiceMap.put(outcome2, "C1");
+    assertEquals("DEPENDENT TWOTHRESHOLD \"point\" 2 C0 C1 [ SIMPLE \"dependent\" C0 ]",
+        dependent.export(choiceMap));
   }
 }

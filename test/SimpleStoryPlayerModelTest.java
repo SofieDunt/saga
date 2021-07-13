@@ -24,8 +24,8 @@ public class SimpleStoryPlayerModelTest {
   public static class MockUntitledStory implements StoryGame {
 
     @Override
-    public void next(int decision) throws IllegalArgumentException {
-
+    public boolean next(int decision) throws IllegalArgumentException {
+      return true;
     }
 
     @Override
@@ -118,7 +118,7 @@ public class SimpleStoryPlayerModelTest {
     assertEquals("Go right(1), Go left(2), or Go straight(3)", model.getCurrentChoice());
     model.playStory("Strength!");
     assertEquals("Strength!", model.getCurrentStoryName());
-    assertEquals("get strength(1) or don't get strength(2)", model.getCurrentChoice());
+    assertEquals("get 1 strength(1), get 2 strength(2), get 3 strength(3), or don't get strength(4)", model.getCurrentChoice());
     String msg = "noException";
     try {
       model.playStory("None");
@@ -175,7 +175,7 @@ public class SimpleStoryPlayerModelTest {
     model.quitStory();
     assertNull(model.getCurrentStoryName());
     model.playStory("Strength!");
-    assertEquals("continue(1) or quit(2)", model.getCurrentChoice());
+    assertEquals("lose", model.getCurrentChoice());
   }
 
   @Test

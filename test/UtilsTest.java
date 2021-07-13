@@ -7,6 +7,9 @@ import java.util.Random;
 import org.junit.Test;
 import utils.Utils;
 
+/**
+ * Tests for methods provided by {@link Utils}.
+ */
 public class UtilsTest {
 
   @Test

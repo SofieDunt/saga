@@ -1,9 +1,9 @@
 package model.game.decision;
 
+import java.util.List;
 import java.util.Map;
 import model.game.Choice;
-import model.game.SimpleChoice;
-import model.game.StatusUpdate;
+import model.game.statusUpdate.StatusUpdate;
 import model.game.StoryGame;
 import utils.Utils;
 
@@ -20,11 +20,11 @@ public class DependentDecision implements Decision {
    * Constructs a {@code DependentDecision} that uses the given decision as a delegate and leads to
    * the outcome determined by the given determiner.
    *
-   * @param delegate   the delegate decision
+   * @param delegate   the decision used as a delegate
    * @param determiner the function object that determines the outcome
    * @throws IllegalArgumentException if any of the arguments are null
    */
-  public DependentDecision(Decision delegate, OutcomeDeterminer determiner)
+  protected DependentDecision(Decision delegate, OutcomeDeterminer determiner)
       throws IllegalArgumentException {
     this.delegate = Utils.ensureNotNull(delegate, "Delegate can't be null!");
     this.determiner = Utils.ensureNotNull(determiner, "Determiner can't be null!");
@@ -41,7 +41,7 @@ public class DependentDecision implements Decision {
    */
   public DependentDecision(String description, OutcomeDeterminer determiner)
       throws IllegalArgumentException {
-    this(new SimpleDecision(description, SimpleChoice.endChoice()), determiner);
+    this(new SimpleDecision(description, determiner.getPossibleOutcomes().get(0)), determiner);
   }
 
   /**
@@ -56,8 +56,8 @@ public class DependentDecision implements Decision {
    */
   public DependentDecision(String description, Map<String, StatusUpdate> statusUpdates,
       OutcomeDeterminer determiner) throws IllegalArgumentException {
-    this(new ConsequentialDecision(description, SimpleChoice.endChoice(), statusUpdates),
-        determiner);
+    this(new ConsequentialDecision(description, determiner.getPossibleOutcomes().get(0),
+        statusUpdates), determiner);
   }
 
   @Override
@@ -69,5 +69,17 @@ public class DependentDecision implements Decision {
   public Choice makeDecision(StoryGame story) throws IllegalArgumentException {
     this.delegate.makeDecision(Utils.ensureNotNull(story, "Story can't be null!"));
     return this.determiner.getOutcome(story.getStatuses());
+  }
+
+  @Override
+  public String export(Map<Choice, String> choiceRepresentations) {
+    Utils.ensureNotNull(choiceRepresentations, "Map can't be null");
+    return DecisionTypes.DEPENDENT.toString() + " " + this.determiner.export(choiceRepresentations)
+        + " [ " + this.delegate.export(choiceRepresentations) + " ]";
+  }
+
+  @Override
+  public List<Choice> getPossibleOutcomes() {
+    return this.determiner.getPossibleOutcomes();
   }
 }

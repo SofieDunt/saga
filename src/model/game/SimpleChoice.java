@@ -39,17 +39,19 @@ public class SimpleChoice implements Choice {
     if (numOptions == 0) {
       return "Game over, no choices left.";
     }
+    if (numOptions == 1) {
+      return this.options.get(0).toString();
+    }
+    if (numOptions == 2) {
+      return this.options.get(0).toString() + "(1) or " + this.options.get(1).toString() + "(2)";
+    }
 
     StringBuilder stringBuilder = new StringBuilder();
-    stringBuilder.append(this.options.get(0).toString()).append(formatChoice(0));
-    for (int i = 1; i < numOptions - 1; i++) {
-      stringBuilder.append(", ").append(this.options.get(i).toString()).append(formatChoice(i))
-          .append(",");
+    for (int i = 0; i < numOptions - 1; i++) {
+      stringBuilder.append(this.options.get(i).toString()).append(formatChoice(i)).append(", ");
     }
-    if (numOptions > 1) {
-      stringBuilder.append(" or ").append(this.options.get(numOptions - 1).toString())
-          .append(formatChoice(numOptions - 1));
-    }
+    stringBuilder.append("or ").append(this.options.get(numOptions - 1).toString())
+        .append(formatChoice(numOptions - 1));
     return stringBuilder.toString();
   }
 
@@ -63,12 +65,8 @@ public class SimpleChoice implements Choice {
   }
 
   @Override
-  public List<String> getOptions() {
-    List<String> descriptions = new ArrayList<>();
-    for (Decision option : this.options) {
-      descriptions.add(option.toString());
-    }
-    return descriptions;
+  public List<Decision> getOptions() {
+    return this.options;
   }
 
   /**

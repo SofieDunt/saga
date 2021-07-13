@@ -16,9 +16,10 @@ public interface StoryGame {
    * Advances the story by one choice, making the given decision for the current choice.
    *
    * @param decision the index of the decision to make, starting at 0
+   * @return true if the next was made, false if otherwise (the story is complete)
    * @throws IllegalArgumentException if the input is an invalid choice (index)
    */
-  void next(int decision) throws IllegalArgumentException;
+  boolean next(int decision) throws IllegalArgumentException;
 
   /**
    * Gets the name of the story.

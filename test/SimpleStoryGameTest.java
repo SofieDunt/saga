@@ -1,4 +1,5 @@
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import java.util.Random;
 import model.game.StoryGame;
@@ -36,9 +37,9 @@ public class SimpleStoryGameTest {
       assertEquals(leftCount, (int) goRight.getStatuses().get("numLefts"));
       assertEquals(straightCount, (int) goRight.getStatuses().get("numStraights"));
       assertEquals(3, goRight.getCurrentChoice().getOptions().size());
-      assertEquals("Go right", goRight.getCurrentChoice().getOptions().get(0));
-      assertEquals("Go left", goRight.getCurrentChoice().getOptions().get(1));
-      assertEquals("Go straight", goRight.getCurrentChoice().getOptions().get(2));
+      assertEquals("Go right", goRight.getCurrentChoice().getOptions().get(0).toString());
+      assertEquals("Go left", goRight.getCurrentChoice().getOptions().get(1).toString());
+      assertEquals("Go straight", goRight.getCurrentChoice().getOptions().get(2).toString());
     }
 
     goRight.next(0);
@@ -50,18 +51,8 @@ public class SimpleStoryGameTest {
   @Test
   public void playThroughDependentGame() {
     strengthStory.next(0);
-    assertEquals(2, strengthStory.getCurrentChoice().getOptions().size());
+    assertEquals(1, strengthStory.getCurrentChoice().getOptions().size());
     strengthStory.next(0);
-    assertEquals(0, strengthStory.getCurrentChoice().getOptions().size());
-  }
-
-  @Test
-  public void playThroughDependentGame2() {
-    strengthStory.next(1);
-    assertEquals(2, strengthStory.getCurrentChoice().getOptions().size());
-    strengthStory.next(0);
-    assertEquals(2, strengthStory.getCurrentChoice().getOptions().size());
-    strengthStory.next(1);
     assertEquals(0, strengthStory.getCurrentChoice().getOptions().size());
   }
 
@@ -83,11 +74,6 @@ public class SimpleStoryGameTest {
     assertEquals("No choice 3", msg);
 
     goRight.next(0);
-    try {
-      goRight.next(0);
-    } catch (IllegalStateException e) {
-      msg = e.getMessage();
-    }
-    assertEquals("The story has been completed!", msg);
+    assertFalse(goRight.next(0));
   }
 }

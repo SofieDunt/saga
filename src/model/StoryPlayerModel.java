@@ -40,10 +40,11 @@ public interface StoryPlayerModel extends StoryPlayerModelState {
    *
    * @param decision the index of the decision to make, starting at 0 and corresponding to the
    *                 translated index output of {@link StoryPlayerModelState#getCurrentChoice()}.
+   * @return true if the decision was made, false if otherwise (the story is complete)
    * @throws IllegalArgumentException if the given decision is invalid
    * @throws IllegalStateException    if no story is loaded
    */
-  void next(int decision) throws IllegalArgumentException, IllegalStateException;
+  boolean next(int decision) throws IllegalArgumentException, IllegalStateException;
 
   /**
    * Quits the given story, saving progress. Does nothing if no story is loaded.

@@ -1,0 +1,19 @@
+"Strength!"
+[ "strength" 0 ]
+5
+{
+[ DEPENDENT TWOTHRESHOLD "strength" 2 C1 C2 [ CONSEQUENTIAL "get 1 strength" [ ADD 1 "strength" ] C1 ] ]
+[ DEPENDENT TWOTHRESHOLD "strength" 2 C1 C2 [ CONSEQUENTIAL "get 2 strength" [ ADD 2 "strength" ] C1 ] ]
+[ DEPENDENT TWOTHRESHOLD "strength" 2 C1 C2 [ CONSEQUENTIAL "get 3 strength" [ ADD 2 "strength" ] C1 ] ]
+[ DEPENDENT TWOTHRESHOLD "strength" 2 C1 C2 [ SIMPLE "don't get strength" C1 ] ]
+[ SIMPLE "win" C3 ]
+[ SIMPLE "lose" C4 ]
+}
+{
+C0 [ D0 D1 D2 D3 ]
+C1 [ D4 ]
+C2 [ D5 ]
+C3 [ ]
+C4 [ ]
+}
+C0
