@@ -5,8 +5,10 @@ import java.util.List;
 /**
  * An interface containing methods to retrieve information about the application's state that can
  * not mutate the model.
+ *
+ * @param <K> the type of story model representing stories in the library
  */
-public interface StoryPlayerModelState {
+public interface StoryPlayerModelState<K> {
 
   /**
    * Gets the name of the loaded story.
@@ -28,4 +30,14 @@ public interface StoryPlayerModelState {
    * @return all story names in the library
    */
   List<String> getAllStoryNames();
+
+
+  /**
+   * Gets a copy of the story of the given name in the library.
+   *
+   * @param name the name of the story
+   * @return a copy of the story
+   * @throws IllegalArgumentException if the named story does not exist in the library
+   */
+  K getStory(String name) throws IllegalArgumentException;
 }

@@ -1,9 +1,11 @@
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import model.SimpleStoryPlayerModel;
 import model.StoryPlayerModel;
@@ -42,15 +44,22 @@ public class SimpleStoryPlayerModelTest {
     public Map<String, Integer> getStatuses() {
       return null;
     }
+
+    @Override
+    public StoryGame getOriginalStory() {
+      return null;
+    }
   }
 
 
-  private final StoryPlayerModel model = new SimpleStoryPlayerModel();
+  private final StoryPlayerModel<StoryGame> model = new SimpleStoryPlayerModel();
+  private final StoryGame goRight = TestDataProvider.goRight();
+  private final StoryGame strength = TestDataProvider.strengthStory();
 
   @Before
   public void initData() {
-    model.addStory(TestDataProvider.goRight());
-    model.addStory(TestDataProvider.strengthStory());
+    model.addStory(goRight);
+    model.addStory(strength);
   }
 
   @Test
@@ -95,20 +104,20 @@ public class SimpleStoryPlayerModelTest {
     } catch (IllegalArgumentException e) {
       msg = e.getMessage();
     }
-    assertEquals("No story \"Not a story\" to remove", msg);
+    assertEquals("No story \"Not a story\" found", msg);
     msg = "noException";
     try {
       model.removeStory("Doesn't exist!");
     } catch (IllegalArgumentException e) {
       msg = e.getMessage();
     }
-    assertEquals("No story \"Doesn't exist!\" to remove", msg);
+    assertEquals("No story \"Doesn't exist!\" found", msg);
     try {
       model.removeStory(null);
     } catch (IllegalArgumentException e) {
       msg = e.getMessage();
     }
-    assertEquals("No story \"null\" to remove", msg);
+    assertEquals("No story \"null\" found", msg);
   }
 
   @Test
@@ -118,14 +127,16 @@ public class SimpleStoryPlayerModelTest {
     assertEquals("Go right(1), Go left(2), or Go straight(3)", model.getCurrentChoice());
     model.playStory("Strength!");
     assertEquals("Strength!", model.getCurrentStoryName());
-    assertEquals("get 1 strength(1), get 2 strength(2), get 3 strength(3), or don't get strength(4)", model.getCurrentChoice());
+    assertEquals(
+        "get 1 strength(1), get 2 strength(2), get 3 strength(3), or don't get strength(4)",
+        model.getCurrentChoice());
     String msg = "noException";
     try {
       model.playStory("None");
     } catch (IllegalArgumentException e) {
       msg = e.getMessage();
     }
-    assertEquals("No story \"None\" to load", msg);
+    assertEquals("No story \"None\" found", msg);
     assertEquals("Strength!", model.getCurrentStoryName());
   }
 
@@ -176,6 +187,28 @@ public class SimpleStoryPlayerModelTest {
     assertNull(model.getCurrentStoryName());
     model.playStory("Strength!");
     assertEquals("lose", model.getCurrentChoice());
+  }
+
+  @Test
+  public void getStory() {
+    StoryGame retrieved = model.getStory("Go Right!");
+    assertNotSame(goRight, retrieved);
+    assertEquals("Go Right!", retrieved.getName());
+    assertEquals("Go right(1), Go left(2), or Go straight(3)",
+        retrieved.getCurrentChoice().toString());
+    assertEquals(0, (int) retrieved.getStatuses().get("numLefts"));
+    model.playStory("Go Right!");
+    model.next(1);
+    assertEquals(1, (int) model.getStory("Go Right!").getStatuses().get("numLefts"));
+    assertNotSame(strength, model.getStory("Strength!"));
+
+    String msg = "";
+    try {
+      model.getStory("None");
+    } catch (IllegalArgumentException e) {
+      msg = e.getMessage();
+    }
+    assertEquals("No story \"None\" found", msg);
   }
 
   @Test

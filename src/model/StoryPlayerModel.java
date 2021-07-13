@@ -6,7 +6,7 @@ package model;
  *
  * @param <K> the type of story model representing stories in the library
  */
-public interface StoryPlayerModel<K> extends StoryPlayerModelState {
+public interface StoryPlayerModel<K> extends StoryPlayerModelState<K> {
 
   /**
    * Adds the given story to the user's library, renaming it in the library if a story of that name

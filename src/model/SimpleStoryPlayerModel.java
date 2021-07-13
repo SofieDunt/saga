@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import model.game.SimpleStoryGame;
 import model.game.StoryGame;
 import utils.Utils;
 
@@ -35,9 +36,7 @@ public class SimpleStoryPlayerModel implements StoryPlayerModel<StoryGame> {
 
   @Override
   public void removeStory(String name) throws IllegalArgumentException {
-    if (name == null || !this.storyLibrary.containsKey(name)) {
-      throw new IllegalArgumentException("No story \"" + name + "\" to remove");
-    }
+    ensureStoryExists(name);
     if (this.currentStory != null && this.currentStory.getName().equals(name)) {
       this.currentStory = null;
     }
@@ -46,11 +45,7 @@ public class SimpleStoryPlayerModel implements StoryPlayerModel<StoryGame> {
 
   @Override
   public void playStory(String name) throws IllegalArgumentException {
-    if (name != null && this.storyLibrary.containsKey(name)) {
-      this.currentStory = this.storyLibrary.get(name);
-    } else {
-      throw new IllegalArgumentException("No story \"" + name + "\" to load");
-    }
+    this.currentStory = ensureStoryExists(name);
   }
 
   @Override
@@ -90,6 +85,27 @@ public class SimpleStoryPlayerModel implements StoryPlayerModel<StoryGame> {
     List<String> allTitles = new ArrayList<>(this.storyLibrary.keySet());
     Collections.sort(allTitles);
     return allTitles;
+  }
+
+  @Override
+  public StoryGame getStory(String name) throws IllegalArgumentException {
+    StoryGame original = ensureStoryExists(name);
+    return new SimpleStoryGame(original);
+  }
+
+  /**
+   * Ensures the named story exists in the library.
+   *
+   * @param name the name of the story
+   * @return the story of the given name
+   * @throws IllegalArgumentException if no story of the given name exists, or the name is null
+   */
+  private StoryGame ensureStoryExists(String name) throws IllegalArgumentException {
+    if (name != null && this.storyLibrary.containsKey(name)) {
+      return this.storyLibrary.get(name);
+    } else {
+      throw new IllegalArgumentException("No story \"" + name + "\" found");
+    }
   }
 
   /**
