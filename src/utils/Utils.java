@@ -46,20 +46,32 @@ public class Utils {
   }
 
   /**
-   * Checks if the given string can be translated into a valid positive string number - that is, it
-   * is a non-empty string made up of only characters that represent numbers. ({@code "0"}, {@code
+   * Checks if the given string can be translated into a valid positive number - that is, it is a
+   * non-empty string made up of only characters that represent numbers. ({@code "0"}, {@code
    * "1.0"}, {@code "-1"}, and {@code "1,000"} are invalid)
    *
    * @param proposedNumber the string to check
-   * @return true if a valid non-negative number, false if null/otherwise
+   * @return true if a valid positive number, false if null/otherwise
    */
   public static boolean isPositiveStringNumber(String proposedNumber) {
+    return isStringNumber(proposedNumber) && Integer.parseInt(proposedNumber) > 0;
+  }
+
+  /**
+   * Checks if the given string can be translated into a valid number - that is, it is a non-empty
+   * string made up of only characters that represent numbers.
+   *
+   * @param proposedNumber the string to check
+   * @return true if a valid number, false if null/otherwise
+   */
+  public static boolean isStringNumber(String proposedNumber) {
     if (proposedNumber == null || proposedNumber.length() == 0) {
       return false;
     }
 
     try {
-      return Integer.parseInt(proposedNumber) > 0;
+      Integer.parseInt(proposedNumber);
+      return true;
     } catch (NumberFormatException e) {
       return false;
     }

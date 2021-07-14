@@ -21,10 +21,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Tests for {@link controller.command.Command}s and {@link
- * controller.command.IOCommand}s.
+ * Tests for {@link controller.command.Command}s and {@link controller.command.IOCommand}s that
+ * command {@link StoryPlayerModel}s.
  */
-public class CommandTests {
+public class PlayerCommandTests {
 
   private final StoryPlayerModel<StoryGame> model = new SimpleStoryPlayerModel();
 

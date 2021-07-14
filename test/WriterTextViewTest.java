@@ -25,7 +25,7 @@ public class WriterTextViewTest {
     model.addStatus("numStraights", 0);
     model.addChoice(); // right/left/straight
     model.addChoice(); // end
-    model.setFirstChoice(0);
+    model.setInitialChoice(0);
     model.addSimpleDecision("Go right", 0, 1);
     model.addConsequentialDecision("Go left", 0, 0,
         Collections.singletonList("ADD 1 numLefts"));

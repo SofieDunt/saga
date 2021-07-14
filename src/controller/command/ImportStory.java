@@ -1,6 +1,5 @@
 package controller.command;
 
-import controller.command.IOCommand;
 import io.TextImporter;
 import model.StoryPlayerModel;
 import model.game.StoryGame;

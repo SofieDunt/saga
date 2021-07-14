@@ -1,6 +1,5 @@
 package controller.command;
 
-import controller.command.IOCommand;
 import io.TextExporter;
 import java.io.IOException;
 import model.StoryPlayerModel;

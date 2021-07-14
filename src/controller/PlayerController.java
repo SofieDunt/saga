@@ -34,7 +34,7 @@ public class PlayerController extends AbstractController {
   protected final Map<String, Supplier<IOCommand<StoryPlayerModel<StoryGame>>>> ioCommands;
 
   /**
-   * Constructs a {@code SimpleController} that controls the given model, outputs to a text view
+   * Constructs a {@code PlayerController} that controls the given model, outputs to a text view
    * that writes to the given appendable, and reads input from the given readable.
    *
    * @param model      the model
@@ -84,7 +84,7 @@ public class PlayerController extends AbstractController {
    */
   private void addCommands() {
     // ------ Model Commands ------ //
-    // Suppliers handle getting appropriate command specifications, ex. layer name
+    // Suppliers handle getting appropriate command specifications, ex. story name
     knownCommands.put("next", () -> new Next("1"));
     knownCommands.put("choose", () ->
         new Next(
