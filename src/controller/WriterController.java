@@ -75,12 +75,18 @@ public class WriterController extends AbstractController {
 
   @Override
   protected void defaultRender() throws IllegalStateException {
+    tryRenderMessage("\n");
     // If a work is loaded, render the current work. Otherwise, render the library.
     if (this.model.getCurrentWorkName() != null) {
       tryRenderCurrent();
     } else {
       tryRenderLibrary();
     }
+  }
+
+  @Override
+  protected void welcome() throws IllegalStateException {
+    tryRenderMessage("Welcome to the story creator!\n");
   }
 
   @Override

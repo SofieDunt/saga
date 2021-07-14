@@ -40,7 +40,7 @@ public abstract class AbstractController implements ApplicationController {
 
   @Override
   public void play() throws IllegalStateException {
-    tryRenderMessage("Welcome to the story player!\n");
+    welcome();
     boolean hasQuit = false;
 
     // Until the user quits, handle input
@@ -63,9 +63,7 @@ public abstract class AbstractController implements ApplicationController {
   }
 
   /**
-   * <<<<<<< HEAD Handles user inputs for the user to enter commands. If reading input fails, quits.
-   * ======= Handles user inputs for the user to process their images or to quit. If reading input
-   * fails, quits. >>>>>>> 837fc62dbcd34d43f48e4530502393ada74ba848
+   * Handles user inputs for the user to enter commands. If reading input fails, quits.
    *
    * @return true if the user has quit, false if otherwise
    * @throws IllegalStateException if writing to the Appendable object used by the controller
@@ -210,6 +208,11 @@ public abstract class AbstractController implements ApplicationController {
   protected abstract void defaultRender() throws IllegalStateException;
 
   /**
+   * Renders something when the application first starts.
+   */
+  protected abstract void welcome() throws IllegalStateException;
+
+  /**
    * Commands the view to render the current choice.
    *
    * @throws IllegalStateException if the choice can't be rendered
@@ -230,7 +233,6 @@ public abstract class AbstractController implements ApplicationController {
    */
   protected void tryRenderLibrary() throws IllegalStateException {
     try {
-      tryRenderMessage("Your story library:\n");
       this.view.renderLibrary();
       tryRenderMessage("\n");
     } catch (IOException e) {

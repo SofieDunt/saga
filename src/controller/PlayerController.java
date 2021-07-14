@@ -74,6 +74,11 @@ public class PlayerController extends AbstractController {
   }
 
   @Override
+  protected void welcome() throws IllegalStateException {
+    tryRenderMessage("Welcome to the story player!\n");
+  }
+
+  @Override
   protected boolean isBaseCommand(String s) {
     return this.knownCommands.containsKey(s) || this.ioCommands.containsKey(s) || super
         .isBaseCommand(s);
