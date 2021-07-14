@@ -11,9 +11,9 @@ import java.util.Scanner;
 import model.game.Choice;
 import model.game.SimpleChoice;
 import model.game.SimpleStoryGame;
-import model.game.decision.DecisionCreator;
 import model.game.StoryGame;
 import model.game.decision.Decision;
+import model.game.decision.DecisionCreator;
 import utils.IOUtils;
 import utils.Utils;
 

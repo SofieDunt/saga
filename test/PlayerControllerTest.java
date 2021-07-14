@@ -3,8 +3,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import controller.PlayerController;
 import controller.ApplicationController;
+import controller.PlayerController;
 import controller.command.PlayStory;
 import controller.command.Restart;
 import java.io.StringReader;

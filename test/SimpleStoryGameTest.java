@@ -11,7 +11,7 @@ import model.game.StoryGame;
 import org.junit.Test;
 
 /**
- * Tests for {@link model.game.SimpleStoryGame}s.
+ * Tests for {@link SimpleStoryGame}s.
  */
 public class SimpleStoryGameTest {
 

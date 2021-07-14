@@ -3,8 +3,8 @@ package model.game.decision;
 import java.util.List;
 import java.util.Map;
 import model.game.Choice;
-import model.game.statusUpdate.StatusUpdate;
 import model.game.StoryGame;
+import model.game.statusUpdate.StatusUpdate;
 import utils.Utils;
 
 /**

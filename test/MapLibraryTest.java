@@ -9,7 +9,7 @@ import utils.Library;
 import utils.MapLibrary;
 
 /**
- * Tests for {@link utils.MapLibrary}s.
+ * Tests for {@link MapLibrary}s.
  */
 public class MapLibraryTest {
 

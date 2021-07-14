@@ -11,7 +11,7 @@ import org.junit.Test;
 
 /**
  * Tests for {@link model.game.statusUpdate.StatusUpdate}s and {@link
- * model.game.statusUpdate.StatusUpdateCreator}s.
+ * StatusUpdateCreator}s.
  */
 public class StatusUpdateTests {
 

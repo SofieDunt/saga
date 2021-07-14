@@ -5,8 +5,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import model.game.Choice;
-import model.game.statusUpdate.StatusUpdate;
 import model.game.StoryGame;
+import model.game.statusUpdate.StatusUpdate;
 import utils.Utils;
 
 /**

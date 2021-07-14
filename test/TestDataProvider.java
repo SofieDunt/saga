@@ -3,18 +3,18 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import model.game.decision.TwoThresholdDeterminer;
-import model.game.statusUpdate.AddStatus;
 import model.game.Choice;
 import model.game.SimpleChoice;
 import model.game.SimpleStoryGame;
-import model.game.statusUpdate.StatusUpdate;
 import model.game.StoryGame;
 import model.game.decision.ConsequentialDecision;
 import model.game.decision.Decision;
 import model.game.decision.DependentDecision;
 import model.game.decision.OutcomeDeterminer;
 import model.game.decision.SimpleDecision;
+import model.game.decision.TwoThresholdDeterminer;
+import model.game.statusUpdate.AddStatus;
+import model.game.statusUpdate.StatusUpdate;
 
 /**
  * A class to provide data instances for testing.

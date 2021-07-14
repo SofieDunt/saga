@@ -3,13 +3,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Scanner;
 import model.SimpleStoryWriterModel;
 import model.StoryWriterModel;
 import model.game.StoryGame;
@@ -17,7 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Tests for {@link model.SimpleStoryWriterModel}s.
+ * Tests for {@link SimpleStoryWriterModel}s.
  */
 public class SimpleStoryWriterModelTest {
 
