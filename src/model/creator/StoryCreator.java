@@ -1,7 +1,5 @@
 package model.creator;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -15,20 +13,9 @@ public interface StoryCreator<K> extends StoryCreatorState {
   /**
    * Creates the story.
    *
-   * @return the stor
+   * @return the story
    */
   K create();
-
-  /**
-   * Exports the story as a text file to the given path.
-   *
-   * @param filePath the path to export to
-   * @return the story
-   * @throws IllegalArgumentException if the path is invalid
-   * @throws IOException              if exporting fails due to an IO error
-   */
-  File export(String filePath) throws IllegalArgumentException, IOException;
-
 
   /**
    * Sets the name of the story being created to the given name.
@@ -70,7 +57,7 @@ public interface StoryCreator<K> extends StoryCreatorState {
    * @param idx the index of the choice, starting at 0
    * @throws IllegalArgumentException if the given index is invalid
    */
-  void setFirstChoice(int idx) throws IllegalArgumentException;
+  void setInitialChoice(int idx) throws IllegalArgumentException;
 
   /**
    * Adds a simple decision as an option to the given choice.

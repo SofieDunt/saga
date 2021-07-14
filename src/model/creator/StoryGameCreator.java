@@ -1,8 +1,5 @@
 package model.creator;
 
-import io.TextExporter;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +13,6 @@ import model.game.StoryGame;
 import model.game.decision.ConsequentialDecision;
 import model.game.decision.Decision;
 import model.game.decision.DependentDecision;
-import model.game.decision.OutcomeDeterminer;
 import model.game.decision.SimpleDecision;
 import model.game.decision.TwoThresholdDeterminer;
 import model.game.statusUpdate.StatusUpdate;
@@ -25,7 +21,7 @@ import utils.IOUtils;
 import utils.Utils;
 
 /**
- * A class that creates {@link StoryGame} and exports them to a text file.
+ * A class that allows users to easily create {@link StoryGame}s.
  */
 public class StoryGameCreator implements StoryCreator<StoryGame> {
 
@@ -58,11 +54,6 @@ public class StoryGameCreator implements StoryCreator<StoryGame> {
   @Override
   public StoryGame create() {
     return createCurrent();
-  }
-
-  @Override
-  public File export(String filePath) throws IllegalArgumentException, IOException {
-    return new TextExporter().export(createCurrent(), filePath);
   }
 
   @Override
@@ -101,7 +92,7 @@ public class StoryGameCreator implements StoryCreator<StoryGame> {
   }
 
   @Override
-  public void setFirstChoice(int idx) throws IllegalArgumentException {
+  public void setInitialChoice(int idx) throws IllegalArgumentException {
     ensureChoiceExists(idx);
     this.firstChoice = idx;
   }

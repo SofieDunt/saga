@@ -32,7 +32,7 @@ public class SimpleStoryWriterModelTest {
     model.addStatus("numStraights", 0);
     model.addChoice(); // right/left/straight
     model.addChoice(); // end
-    model.setFirstChoice(0);
+    model.setInitialChoice(0);
     model.addSimpleDecision("Go right", 0, 1);
     model.addConsequentialDecision("Go left", 0, 0,
         Collections.singletonList("ADD 1 numLefts"));
@@ -229,37 +229,6 @@ public class SimpleStoryWriterModelTest {
   }
 
   @Test
-  public void export() throws IOException {
-    model.load("Go Right!");
-    String referencePath = "./res/right.txt";
-    File exported = model.export(null);
-    Scanner sc1 = new Scanner(new FileInputStream(referencePath));
-    Scanner sc2 = new Scanner(new FileInputStream(exported));
-
-    while (sc1.hasNext()) {
-      assertTrue(sc2.hasNext());
-      assertEquals(sc1.next(), sc2.next());
-    }
-
-    assertTrue(exported.delete());
-
-    exported = model.export("./res/test.txt");
-    sc1.reset();
-    sc2 = new Scanner(new FileInputStream(exported));
-    while (sc1.hasNext()) {
-      assertTrue(sc2.hasNext());
-      assertEquals(sc1.next(), sc2.next());
-    }
-
-    assertTrue(exported.delete());
-  }
-
-  @Test(expected = IllegalStateException.class)
-  public void exportNoneLoaded() throws IOException {
-    model.export(null);
-  }
-
-  @Test
   public void setStoryName() {
     model.load("Go Right!");
     model.setStoryName("right");
@@ -411,7 +380,7 @@ public class SimpleStoryWriterModelTest {
   public void setFirstChoice() {
     model.start("Test");
     model.load("Go Right!");
-    model.setFirstChoice(1);
+    model.setInitialChoice(1);
     assertEquals(1, model.getInitialChoice());
     StoryGame story = model.create();
     assertEquals("Game over, no choices left.", story.getCurrentChoice().toString());
@@ -422,18 +391,18 @@ public class SimpleStoryWriterModelTest {
   @Test(expected = IllegalArgumentException.class)
   public void setFirstChoiceInvalidIdxNegative() {
     model.load("Go Right!");
-    model.setFirstChoice(-1);
+    model.setInitialChoice(-1);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void setFirstChoiceInvalidIdxAbove() {
     model.load("Go Right!");
-    model.setFirstChoice(2);
+    model.setInitialChoice(2);
   }
 
   @Test(expected = IllegalStateException.class)
   public void setFirstChoiceNoneLoaded() {
-    model.setFirstChoice(0);
+    model.setInitialChoice(0);
   }
 
   @Test
@@ -706,7 +675,7 @@ public class SimpleStoryWriterModelTest {
   @Test(expected = IllegalArgumentException.class)
   public void removeChoiceConsequentialDependent() {
     model.load("Go Right!");
-    model.setFirstChoice(1);
+    model.setInitialChoice(1);
     model.removeChoice(0);
   }
 

@@ -31,7 +31,7 @@ public class StoryGameCreatorTest {
     goRightCreator.addStatus("numStraights", 0);
     goRightCreator.addChoice(); // right/left/straight
     goRightCreator.addChoice(); // end
-    goRightCreator.setFirstChoice(0);
+    goRightCreator.setInitialChoice(0);
     goRightCreator.addSimpleDecision("Go right", 0, 1);
     goRightCreator.addConsequentialDecision("Go left", 0, 0,
         Collections.singletonList("ADD 1 numLefts"));
@@ -68,31 +68,6 @@ public class StoryGameCreatorTest {
     assertEquals(1, (int) story.getStatuses().get("numLefts"));
     assertEquals(1, (int) story.getStatuses().get("numStraights"));
     assertEquals("Game over, no choices left.", story.getCurrentChoice().toString());
-  }
-
-  @Test
-  public void export() throws IOException {
-    String referencePath = "./res/right.txt";
-    File exported = goRightCreator.export(null);
-    Scanner sc1 = new Scanner(new FileInputStream(referencePath));
-    Scanner sc2 = new Scanner(new FileInputStream(exported));
-
-    while (sc1.hasNext()) {
-      assertTrue(sc2.hasNext());
-      assertEquals(sc1.next(), sc2.next());
-    }
-
-    assertTrue(exported.delete());
-
-    exported = goRightCreator.export("./res/test");
-    sc1.reset();
-    sc2 = new Scanner(new FileInputStream(exported));
-    while (sc1.hasNext()) {
-      assertTrue(sc2.hasNext());
-      assertEquals(sc1.next(), sc2.next());
-    }
-
-    assertTrue(exported.delete());
   }
 
   @Test
@@ -212,7 +187,7 @@ public class StoryGameCreatorTest {
 
   @Test
   public void setFirstChoice() {
-    goRightCreator.setFirstChoice(1);
+    goRightCreator.setInitialChoice(1);
     assertEquals(1, goRightCreator.getInitialChoice());
     StoryGame story = goRightCreator.create();
     assertEquals("Game over, no choices left.", story.getCurrentChoice().toString());
@@ -220,12 +195,12 @@ public class StoryGameCreatorTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void setFirstChoiceInvalidIdxNegative() {
-    goRightCreator.setFirstChoice(-1);
+    goRightCreator.setInitialChoice(-1);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void setFirstChoiceInvalidIdxAbove() {
-    goRightCreator.setFirstChoice(2);
+    goRightCreator.setInitialChoice(2);
   }
 
   @Test
@@ -603,7 +578,7 @@ public class StoryGameCreatorTest {
   @Test(expected = IllegalArgumentException.class)
   public void removeChoiceIsAnOutcome() {
     try {
-      goRightCreator.setFirstChoice(1);
+      goRightCreator.setInitialChoice(1);
     } catch (IllegalArgumentException e) {
       // No exception here
     }

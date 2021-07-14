@@ -1,7 +1,5 @@
 package model;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import model.creator.StoryCreator;
@@ -69,12 +67,6 @@ public class SimpleStoryWriterModel implements StoryWriterModel<StoryGame> {
   }
 
   @Override
-  public File export(String filePath)
-      throws IllegalArgumentException, IOException, IllegalStateException {
-    return ensureWorkLoaded().export(filePath);
-  }
-
-  @Override
   public void setStoryName(String name) throws IllegalArgumentException, IllegalStateException {
     ensureWorkLoaded().setStoryName(name);
   }
@@ -96,8 +88,8 @@ public class SimpleStoryWriterModel implements StoryWriterModel<StoryGame> {
   }
 
   @Override
-  public void setFirstChoice(int idx) throws IllegalArgumentException, IllegalStateException {
-    ensureWorkLoaded().setFirstChoice(idx);
+  public void setInitialChoice(int idx) throws IllegalArgumentException, IllegalStateException {
+    ensureWorkLoaded().setInitialChoice(idx);
   }
 
   @Override
