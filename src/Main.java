@@ -1,5 +1,5 @@
 import controller.PlayerController;
-import controller.StoryPlayerController;
+import controller.ApplicationController;
 import java.io.InputStreamReader;
 import model.SimpleStoryPlayerModel;
 import model.StoryPlayerModel;
@@ -17,7 +17,7 @@ public class Main {
    */
   public static void main(String[] args) {
     StoryPlayerModel<StoryGame> model = new SimpleStoryPlayerModel();
-    StoryPlayerController controller = new PlayerController(model, new InputStreamReader(System.in),
+    ApplicationController controller = new PlayerController(model, new InputStreamReader(System.in),
         System.out);
     controller.play();
   }

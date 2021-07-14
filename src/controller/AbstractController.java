@@ -11,7 +11,7 @@ import view.LibraryApplicationView;
  * An abstract controller for a story player application to handle the logic of processing user
  * input.
  */
-public abstract class AbstractController implements StoryPlayerController {
+public abstract class AbstractController implements ApplicationController {
 
   // The view the controller controls
   private final LibraryApplicationView view;
