@@ -1,11 +1,14 @@
 import static org.junit.Assert.assertEquals;
 
 import controller.AbstractController;
+import controller.ApplicationController;
 import controller.PlayerController;
+import controller.WriterController;
 import java.io.IOException;
 import java.io.StringReader;
 import java.nio.CharBuffer;
 import model.SimpleStoryPlayerModel;
+import model.SimpleStoryWriterModel;
 import model.StoryPlayerModel;
 import model.game.StoryGame;
 import org.junit.Test;
@@ -14,7 +17,23 @@ import view.PlayerTextView;
 /**
  * Tests to ensure failed IO processes are handled correctly by the controller.
  */
-public class BadIOControllerTests {
+public abstract class BadIOControllerTests {
+
+  /**
+   * Returns an instance of a controller that appends to the given appendable for testing.
+   *
+   * @param appendable the appendable the controller writes to
+   * @return the controller instance
+   */
+  protected abstract ApplicationController controller(Appendable appendable);
+
+  /**
+   * Constructs an instance of a controller that reads input from the given readable for testing.
+   *
+   * @param readable the readable the controller reads input from
+   * @return the controller instance
+   */
+  protected abstract ApplicationController controller(Readable readable);
 
   /**
    * A mock appendable class to mock failed appends on specific calls.
@@ -104,6 +123,11 @@ public class BadIOControllerTests {
     }
 
     @Override
+    protected void welcome() throws IllegalStateException {
+
+    }
+
+    @Override
     protected boolean isBaseCommand(String s) {
       return true;
     }
@@ -111,14 +135,12 @@ public class BadIOControllerTests {
 
   @Test(expected = IllegalStateException.class)
   public void testFailedRenderMessage() {
-    new PlayerController(new SimpleStoryPlayerModel(), new StringReader(""),
-        new BadAppendable(1)).play();
+    controller(new BadAppendable(1)).play();
   }
 
   @Test(expected = IllegalStateException.class)
   public void testFailedRenderLibrary() {
-    new PlayerController(new SimpleStoryPlayerModel(), new StringReader(""),
-        new BadAppendable(3)).play();
+    controller(new BadAppendable(3)).play();
   }
 
   @Test(expected = IllegalStateException.class)
@@ -126,21 +148,20 @@ public class BadIOControllerTests {
     StoryPlayerModel<StoryGame> model = new SimpleStoryPlayerModel();
     model.addStory(TestDataProvider.goRight());
     model.playStory("Go Right!");
-    new PlayerController(model, new StringReader(""), new BadAppendable(2)).play();
+    controller(new BadAppendable(2)).play();
   }
 
   @Test
   public void testFailedAppendMessage() {
     try {
-      new PlayerController(new SimpleStoryPlayerModel(), new StringReader(""),
-          new BadAppendable(1)).play();
+      controller(new BadAppendable(1)).play();
     } catch (IllegalStateException e) {
       assertEquals("The view can not be rendered.", e.getMessage());
     }
   }
 
   @Test
-  public void testFailedReadClosesApplication() {
+  public void testFailedReadClosesApplicationPlayer() {
     StringBuilder output = new StringBuilder();
     new PlayerController(new SimpleStoryPlayerModel(), new BadReadable(), output).play();
     assertEquals("Welcome to the story player!\n"
@@ -151,11 +172,21 @@ public class BadIOControllerTests {
   }
 
   @Test
+  public void testFailedReadClosesApplicationWriter() {
+    StringBuilder output = new StringBuilder();
+    new WriterController(new SimpleStoryWriterModel(), new BadReadable(), output).play();
+    assertEquals("Welcome to the story creator!\n"
+        + "\n"
+        + "You don't have any works in your library. Start one now!\n"
+        + "Enter a valid command:\n"
+        + "Application closed.", output.toString());
+  }
+
+  @Test
   public void testFailIOBaseCommand() {
     StringBuilder output = new StringBuilder();
     new BadController(output, new StringReader("export")).play();
-    assertEquals("Welcome to the story player!\n"
-        + "Enter a valid command:\n"
+    assertEquals("Enter a valid command:\n"
         + "Could not export: IO failure: Mock fail IO in base command\n"
         + "Enter a valid command:\n"
         + "Application closed.", output.toString());

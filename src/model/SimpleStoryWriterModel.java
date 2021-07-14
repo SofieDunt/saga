@@ -24,8 +24,16 @@ public class SimpleStoryWriterModel implements StoryWriterModel<StoryGame> {
    * Constructs a {@code SimpleStoryWriterModel} with an empty library.
    */
   public SimpleStoryWriterModel() {
-    this.workLibrary = new MapLibrary<>(s -> "Can't add null", s -> "No story \"" + s + "\" found",
-        s -> s + " already exists");
+    this.workLibrary = new MapLibrary<>(
+        s -> "Can't add null",
+        s -> "No work \"" + s + "\" found",
+        s -> {
+          if (s == null) {
+            return "Name can't be null.";
+          } else {
+            return s + " already exists";
+          }
+        });
     this.currentWork = null;
   }
 

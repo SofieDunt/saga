@@ -77,6 +77,9 @@ public class StoryGameCreator implements StoryCreator<StoryGame> {
     Utils.ensureNotNull(name, "Status name can't be null");
     if (this.statuses.containsKey(name) && !isUsedStatus(name)) {
       statuses.remove(name);
+    } else if (this.statuses.containsKey(name)) {
+      throw new IllegalArgumentException(
+          "At least one decision references this status.");
     } else {
       throw new IllegalArgumentException("No status " + name + " in the story");
     }
@@ -156,7 +159,7 @@ public class StoryGameCreator implements StoryCreator<StoryGame> {
   @Override
   public void removeDecision(int choiceIdx, int decisionIdx) throws IllegalArgumentException {
     Choice choice = ensureChoiceExists(choiceIdx);
-    if (decisionIdx > 0 && decisionIdx < choice.getOptions().size()) {
+    if (decisionIdx >= 0 && decisionIdx < choice.getOptions().size()) {
       Decision decision = choice.getOptions().remove(decisionIdx);
       if (!isAnOption(decision)) { // sanity check but no decision should be used twice
         this.decisions.remove(decision);

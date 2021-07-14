@@ -42,6 +42,7 @@ public class PlayerTextView implements LibraryApplicationView {
 
   @Override
   public void renderLibrary() throws IOException {
+    this.destination.append("Your story library:\n");
     List<String> storyNames = this.modelState.getAllStoryNames();
     if (storyNames.size() == 0) {
       this.destination.append("You don't have any stories in your library. Import some!");

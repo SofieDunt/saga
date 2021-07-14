@@ -42,7 +42,7 @@ public class PlayerTextViewTest {
   @Test
   public void renderLibrary() throws IOException {
     view.renderLibrary();
-    assertEquals("Go Right!\nStrength!\n", appendable.toString());
+    assertEquals("Your story library:\nGo Right!\nStrength!\n", appendable.toString());
     model.playStory("Strength!");
     view.renderLibrary();
     assertTrue(appendable.toString().contains("Go Right!\nStrength!\nLoaded: Strength!"));

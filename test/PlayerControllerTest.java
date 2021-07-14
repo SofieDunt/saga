@@ -17,18 +17,19 @@ import org.junit.Test;
 /**
  * Tests to ensure {@link PlayerController}s control their models and view correctly.
  */
-public class PlayerControllerTest {
+public class PlayerControllerTest extends BadIOControllerTests {
 
-  protected final StoryPlayerModel<StoryGame> model = new SimpleStoryPlayerModel();
-  protected final Appendable output = new StringBuilder();
+  private final StoryPlayerModel<StoryGame> model = new SimpleStoryPlayerModel();
+  private final Appendable output = new StringBuilder();
 
-  /**
-   * Constructs an instance of a controller that reads input from the given input for testing.
-   *
-   * @param input the readable the controller reads from
-   * @return the controller instance
-   */
-  private ApplicationController controller(Readable input) {
+
+  @Override
+  protected ApplicationController controller(Appendable appendable) {
+    return new PlayerController(new SimpleStoryPlayerModel(), new StringReader(""), appendable);
+  }
+
+  @Override
+  protected ApplicationController controller(Readable input) {
     return new PlayerController(model, input, output);
   }
 

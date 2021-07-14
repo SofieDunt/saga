@@ -37,11 +37,12 @@ public class WriterTextView implements LibraryApplicationView {
 
   @Override
   public void renderCurrent() throws IOException {
-    Object current = this.modelState.getCurrentWorkName();
+    String current = this.modelState.getCurrentWorkName();
     if (current == null) {
       this.destination.append("No loaded work");
     } else {
-      this.destination.append("Name: ").append(this.modelState.getStoryName()).append("\n");
+      this.destination.append("Work Name: ").append(current).append("\n");
+      this.destination.append("Story Name: ").append(this.modelState.getStoryName()).append("\n");
       this.destination.append("Statuses:\n");
       for (Entry<String, Integer> status : this.modelState.getStatuses().entrySet()) {
         this.destination.append("Name: ").append(status.getKey())

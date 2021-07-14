@@ -41,7 +41,8 @@ public class WriterTextViewTest {
     int from = appendable.toString().length();
     model.load("Go Right!");
     view.renderCurrent();
-    assertEquals("Name: Go Right!\n"
+    assertEquals("Work Name: Go Right!\n"
+            + "Story Name: Go Right!\n"
             + "Statuses:\n"
             + "Name: numLefts, Initial Value: 0\n"
             + "Name: numStraights, Initial Value: 0\n"
@@ -59,7 +60,8 @@ public class WriterTextViewTest {
     model.addChoice();
     model.addSimpleDecision("Test", 2, 1);
     view.renderCurrent();
-    assertEquals("Name: Go Right!\n"
+    assertEquals("Work Name: Go Right!\n"
+            + "Story Name: Go Right!\n"
             + "Statuses:\n"
             + "Name: numLefts, Initial Value: 0\n"
             + "Name: numStraights, Initial Value: 0\n"
@@ -79,7 +81,8 @@ public class WriterTextViewTest {
     model.addConsequentialThresholdDecision("Test Complicated", 2, "numLefts", 3, 0, 1,
         Arrays.asList("ADD 1 numLefts", "SET 20 numStraights"));
     view.renderCurrent();
-    assertEquals("Name: Go Right!\n"
+    assertEquals("Work Name: Go Right!\n"
+            + "Story Name: Go Right!\n"
             + "Statuses:\n"
             + "Name: numLefts, Initial Value: 0\n"
             + "Name: numStraights, Initial Value: 0\n"
