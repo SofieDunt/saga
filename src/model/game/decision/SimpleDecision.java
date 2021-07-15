@@ -46,7 +46,8 @@ public class SimpleDecision implements Decision {
       throw new IllegalArgumentException("Map doesn't contain outcome");
     }
 
-    return DecisionTypes.SIMPLE + " \"" + this.description + "\" " + choiceRepresentations.get(this.outcome);
+    return DecisionTypes.SIMPLE + " \"" + this.description + "\" " + choiceRepresentations
+        .get(this.outcome);
   }
 
   @Override

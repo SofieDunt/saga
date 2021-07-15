@@ -40,6 +40,7 @@ public interface Decision {
 
   /**
    * Returns a list of all of the decision's possible outcomes.
+   *
    * @return the list of choice outcomes
    */
   List<Choice> getPossibleOutcomes();
