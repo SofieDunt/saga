@@ -66,7 +66,7 @@ public class PlayerControllerTest extends BadIOControllerTests {
 
   @Test
   public void testExportImportStory() {
-    String exportPath = "./res/controllerTest/controllerExport.txt";
+    String exportPath = "./src/test/resources/controllerTest/controllerExport.txt";
     model.playStory("Go Right!");
     model.next(1);
     controller(new StringReader(

@@ -109,7 +109,7 @@ public class WriterControllerTest extends BadIOControllerTests {
 
   @Test
   public void export() {
-    String exportPath = "./res/writerControllerExport.txt";
+    String exportPath = "./src/test/resources/writerControllerExport.txt";
     controller(new StringReader("load \"Go Right!\" export " + exportPath)).play();
     // Check controlled view
     assertTrue(output.toString().contains("Enter path to export to:"));

@@ -22,7 +22,7 @@ import org.junit.Test;
  * Tests for {@link Choice}s and {@link Decision}s, testing with different {@link Decision}
  * implementations.
  */
-public abstract class ChoiceAndDecisionTests {
+public class ChoiceAndDecisionTests {
 
   private static StoryGame story;
   protected final Choice toEndChoice = new SimpleChoice(
@@ -39,14 +39,18 @@ public abstract class ChoiceAndDecisionTests {
    *
    * @return the decision instance
    */
-  protected abstract Decision endDecision();
+  protected Decision endDecision() {
+    return new SimpleDecision("End", endChoice);
+  }
 
   /**
    * Creates a decision that leads to the toEndChoice for testing.
    *
    * @return the decision instance
    */
-  protected abstract Decision decision();
+  protected Decision decision() {
+    return new SimpleDecision("Decision", toEndChoice);
+  }
 
   /**
    * A class for testing {@link SimpleDecision} implementations of {@link Decision}.

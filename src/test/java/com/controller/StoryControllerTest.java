@@ -17,7 +17,7 @@ import org.junit.Test;
  */
 public class StoryControllerTest {
 
-  private StoryController controller = new StoryController();
+  private final StoryController controller = new StoryController();
 
   @Before
   public void init() {

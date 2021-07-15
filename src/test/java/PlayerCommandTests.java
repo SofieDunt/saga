@@ -36,7 +36,7 @@ public class PlayerCommandTests {
 
   @Test
   public void testExportImportStory() throws IOException {
-    String exportPath = "./res/controllerTest/story.txt";
+    String exportPath = "./src/test/resources/controllerTest/story.txt";
     model.playStory("Go Right!");
     model.next(1);
     new ExportStory(exportPath, "Go Right!", false).execute(model);

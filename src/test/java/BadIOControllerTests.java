@@ -17,7 +17,7 @@ import view.PlayerTextView;
 /**
  * Tests to ensure failed IO processes are handled correctly by the controller.
  */
-public abstract class BadIOControllerTests {
+public class BadIOControllerTests {
 
   /**
    * Returns an instance of a controller that appends to the given appendable for testing.
@@ -25,7 +25,9 @@ public abstract class BadIOControllerTests {
    * @param appendable the appendable the controller writes to
    * @return the controller instance
    */
-  protected abstract ApplicationController controller(Appendable appendable);
+  protected ApplicationController controller(Appendable appendable) {
+    return new PlayerController(new SimpleStoryPlayerModel(), new StringReader(""), appendable);
+  }
 
   /**
    * Constructs an instance of a controller that reads input from the given readable for testing.
@@ -33,7 +35,9 @@ public abstract class BadIOControllerTests {
    * @param readable the readable the controller reads input from
    * @return the controller instance
    */
-  protected abstract ApplicationController controller(Readable readable);
+  protected ApplicationController controller(Readable readable) {
+    return new PlayerController(new SimpleStoryPlayerModel(), readable, new StringBuilder());
+  }
 
   /**
    * A mock appendable class to mock failed appends on specific calls.
@@ -132,6 +136,7 @@ public abstract class BadIOControllerTests {
       return true;
     }
   }
+
 
   @Test(expected = IllegalStateException.class)
   public void testFailedRenderMessage() {

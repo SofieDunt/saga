@@ -144,7 +144,7 @@ public class WriterCommandTests {
   @Test
   public void export() throws IOException {
     new LoadWork("Go Right!").execute(model);
-    String referencePath = "./res/right.txt";
+    String referencePath = "./src/test/resources/right.txt";
     new ExportWork(null).execute(model);
     File exported = new File("./Go Right!.txt");
     Scanner sc1 = new Scanner(new FileInputStream(referencePath));
@@ -157,8 +157,8 @@ public class WriterCommandTests {
 
     assertTrue(exported.delete());
 
-    new ExportWork("./res/test.txt").execute(model);
-    exported = new File("./res/test.txt");
+    new ExportWork("./src/test/resources/test.txt").execute(model);
+    exported = new File("./src/test/resources/test.txt");
     sc1.reset();
     sc2 = new Scanner(new FileInputStream(exported));
     while (sc1.hasNext()) {

@@ -21,8 +21,8 @@ public class TextImporterExporterTest {
 
   @Test
   public void testImportExport() throws IOException {
-    String exportedPath = "./res/ioTest/right1.txt";
-    String importedPath = "./res/ioTest/right2.txt";
+    String exportedPath = "./src/test/resources/ioTest/right1.txt";
+    String importedPath = "./src/test/resources/ioTest/right2.txt";
 
     new TextExporter().export(TestDataProvider.goRight(), exportedPath);
     StoryGame storyGame = new TextImporter().importStory(exportedPath);
@@ -39,8 +39,8 @@ public class TextImporterExporterTest {
 
   @Test
   public void testImportExportDependent() throws IOException {
-    String exportedPath = "./res/ioTest/strength1.txt";
-    String importedPath = "./res/ioTest/strength2.txt";
+    String exportedPath = "./src/test/resources/ioTest/strength1.txt";
+    String importedPath = "./src/test/resources/ioTest/strength2.txt";
 
     new TextExporter().export(TestDataProvider.strengthStory(), exportedPath);
     StoryGame storyGame = new TextImporter().importStory(exportedPath);
@@ -110,7 +110,7 @@ public class TextImporterExporterTest {
   @Test
   public void testImportInvalidFormats() {
     char ps = IOUtils.pathSeparator();
-    String dirPath = "." + ps + "res" + ps;
+    String dirPath = "./src/test/resources/";
     String msg = "No exception";
     List<String> badFileNames = new ArrayList<>(Arrays
         .asList("badImports/badCq.txt", "badImports/badSU.txt", "badImports/empty.txt",
