@@ -1,7 +1,6 @@
 package controller.command;
 
 import io.TextImporter;
-import java.io.IOException;
 import model.StoryWriterModel;
 import model.game.StoryGame;
 import utils.Utils;
@@ -25,7 +24,7 @@ public class ImportWork implements IOCommand<StoryWriterModel<StoryGame>> {
 
   @Override
   public void execute(StoryWriterModel<StoryGame> model)
-      throws IllegalArgumentException, IOException {
+      throws IllegalArgumentException {
     Utils.ensureNotNull(model, "Model can't be null");
     model.add(new TextImporter().importStory(this.filePath));
   }

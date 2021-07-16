@@ -1,5 +1,6 @@
 package service.controller;
 
+import java.io.File;
 import service.controller.request.AddConsequentialDecisionRequest;
 import service.controller.request.AddConsequentialDependentRequest;
 import service.controller.request.AddSimpleDecisionRequest;
@@ -33,6 +34,37 @@ public class StoryController extends ControllerExceptionHandler {
 
   private static final String PLAYER_BASE = "/player";
   private static final String WRITER_BASE = "/writer";
+
+  private static final String PLAYER_STORE = "store/playStore";
+  private static final String WRITER_STORE = "store/writeStore";
+
+  /**
+   * Imports any saved files in the store.
+   */
+  public StoryController() {
+    File[] allPlays = new File(PLAYER_STORE).listFiles();
+    File[] allWorks = new File(WRITER_STORE).listFiles();
+
+    if (allPlays != null) {
+      for (File file : allPlays) {
+        try {
+          new ImportStory(file.getPath()).execute(playerModel);
+        } catch (IllegalArgumentException e) {
+          // do nothing
+        }
+      }
+    }
+
+    if (allWorks != null) {
+      for (File file : allWorks) {
+        try {
+          new ImportWork(file.getPath()).execute(writerModel);
+        } catch (IllegalArgumentException e) {
+          // do nothing
+        }
+      }
+    }
+  }
 
   // Player
 
@@ -69,14 +101,14 @@ public class StoryController extends ControllerExceptionHandler {
     return playerModel.getAllStoryNames();
   }
 
-  @GetMapping(PLAYER_BASE + "/export")
+  @PostMapping(PLAYER_BASE + "/export")
   public String export(@RequestParam("path") String path, @RequestParam("name") String name)
       throws IOException {
     new ExportStory(path, name, true).execute(playerModel);
     return "Success";
   }
 
-  @GetMapping(PLAYER_BASE + "/export-in-progress")
+  @PostMapping(PLAYER_BASE + "/export-in-progress")
   public String exportInProgress(@RequestParam("path") String path,
       @RequestParam("name") String name)
       throws IOException {
@@ -151,7 +183,7 @@ public class StoryController extends ControllerExceptionHandler {
   }
 
   @PostMapping(WRITER_BASE + "/import")
-  public void importToWriter(@RequestParam("path") String path) throws IOException {
+  public void importToWriter(@RequestParam("path") String path) {
     new ImportWork(path).execute(this.writerModel);
   }
 

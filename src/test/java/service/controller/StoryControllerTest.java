@@ -1,4 +1,4 @@
-package com.controller;
+package service.controller;
 
 import static org.testng.Assert.assertEquals;
 

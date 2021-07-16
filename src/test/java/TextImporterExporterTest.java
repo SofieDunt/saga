@@ -22,7 +22,7 @@ public class TextImporterExporterTest {
   @Test
   public void testImportExport() throws IOException {
     String exportedPath = "./src/test/resources/ioTest/right1.txt";
-    String importedPath = "./src/test/resources/ioTest/right2.txt";
+    String importedPath = "./src/test/resources/ioTest/left.txt";
 
     new TextExporter().export(TestDataProvider.goRight(), exportedPath);
     StoryGame storyGame = new TextImporter().importStory(exportedPath);
