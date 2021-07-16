@@ -1,4 +1,4 @@
-package com.controller.request;
+package service.controller.request;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.response;
+package service.response;
 
 import model.game.statusUpdate.StatusUpdateTypes;
 

@@ -44,4 +44,11 @@ public interface Decision {
    * @return the list of choice outcomes
    */
   List<Choice> getPossibleOutcomes();
+
+  /**
+   * Returns a list of names of all statuses the decision is dependent on.
+   *
+   * @return the list of dependencies
+   */
+  List<String> getDependencies();
 }

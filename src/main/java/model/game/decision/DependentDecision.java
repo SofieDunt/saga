@@ -82,4 +82,11 @@ public class DependentDecision implements Decision {
   public List<Choice> getPossibleOutcomes() {
     return this.determiner.getPossibleOutcomes();
   }
+
+  @Override
+  public List<String> getDependencies() {
+    List<String> dependencies = this.delegate.getDependencies();
+    dependencies.addAll(this.determiner.getDependency());
+    return dependencies;
+  }
 }

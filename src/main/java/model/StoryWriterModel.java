@@ -1,6 +1,7 @@
 package model;
 
 import model.creator.StoryCreator;
+import model.game.StoryGame;
 
 /**
  * The interface of a model for an application in which users can "write" (or create) stories and
@@ -10,6 +11,15 @@ import model.creator.StoryCreator;
  * @param <K> the type of the stories being created
  */
 public interface StoryWriterModel<K> extends StoryCreator<K>, StoryWriterModelState {
+
+  /**
+   * Adds a new work to the library from the given story. If the story's name already exists in the
+   * library, creates a valid work name, but keeps the same story name.
+   *
+   * @param story the story to add as a work
+   * @throws IllegalArgumentException if the given story is null
+   */
+  void add(StoryGame story) throws IllegalArgumentException;
 
   /**
    * Adds a new work to the library to create a story of the given name. If the name already exists

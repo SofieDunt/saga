@@ -1,4 +1,4 @@
-package com.response;
+package service.response;
 
 import java.util.Map.Entry;
 
@@ -8,16 +8,16 @@ import java.util.Map.Entry;
 public class StoryStatusResponse {
 
   private String name;
-  private int initialValue;
+  private int value;
 
-  public StoryStatusResponse(String name, int initialValue) {
+  public StoryStatusResponse(String name, int value) {
     this.name = name;
-    this.initialValue = initialValue;
+    this.value = value;
   }
 
   public StoryStatusResponse(Entry<String, Integer> entry) {
     this.name = entry.getKey();
-    this.initialValue = entry.getValue();
+    this.value = entry.getValue();
   }
 
   public String getName() {
@@ -28,11 +28,11 @@ public class StoryStatusResponse {
     this.name = name;
   }
 
-  public int getInitialValue() {
-    return initialValue;
+  public int getValue() {
+    return value;
   }
 
-  public void setInitialValue(int initialValue) {
-    this.initialValue = initialValue;
+  public void setValue(int value) {
+    this.value = value;
   }
 }

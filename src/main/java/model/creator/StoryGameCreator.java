@@ -1,5 +1,6 @@
 package model.creator;
 
+import io.StoryNodes;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,6 +50,35 @@ public class StoryGameCreator implements StoryCreator<StoryGame> {
     this.decisions = new ArrayList<>();
     this.dependencies = new HashMap<>();
     this.options = new HashMap<>();
+  }
+
+  /**
+   * Constructs a {@code StoryGameCreator} from the given story.
+   *
+   * @param story story game
+   * @throws IllegalArgumentException if the given story is null
+   */
+  public StoryGameCreator(StoryGame story) throws IllegalArgumentException {
+    Utils.ensureNotNull(story, "Story can't be null");
+    StoryNodes nodes = StoryNodes.createNodes(story);
+    List<Choice> choices = nodes.getChoices();
+    List<Decision> decisions = nodes.getDecisions();
+    this.storyName = story.getName();
+    this.statuses = story.getStatuses();
+    this.choices = choices;
+    this.firstChoice = choices.indexOf(story.getCurrentChoice());
+    this.decisions = decisions;
+    Map<Decision, List<String>> dependencies = new HashMap<>();
+    for (Decision decision : decisions) {
+      dependencies.put(decision, decision.getDependencies());
+    }
+    this.dependencies = dependencies;
+
+    Map<Choice, List<Decision>> options = new HashMap<>();
+    for (Choice choice : choices) {
+      options.put(choice, choice.getOptions());
+    }
+    this.options = options;
   }
 
   @Override

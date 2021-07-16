@@ -1,4 +1,4 @@
-package com.response;
+package service.response;
 
 import java.util.List;
 
@@ -7,20 +7,20 @@ import java.util.List;
  */
 public class ChoiceResponse {
 
-  private int choiceId;
+  private int id;
   private List<OptionResponse> options;
 
-  public ChoiceResponse(int choiceId, List<OptionResponse> options) {
-    this.choiceId = choiceId;
+  public ChoiceResponse(int id, List<OptionResponse> options) {
+    this.id = id;
     this.options = options;
   }
 
-  public int getChoiceId() {
-    return choiceId;
+  public int getId() {
+    return id;
   }
 
-  public void setChoiceId(int choiceId) {
-    this.choiceId = choiceId;
+  public void setId(int id) {
+    this.id = id;
   }
 
   public List<OptionResponse> getOptions() {

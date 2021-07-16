@@ -2,9 +2,10 @@ package com.controller;
 
 import static org.testng.Assert.assertEquals;
 
-import com.response.ChoiceResponse;
-import com.response.StoryResponse;
-import com.response.StoryStatusResponse;
+import service.controller.StoryController;
+import service.response.ChoiceResponse;
+import service.response.StoryResponse;
+import service.response.StoryStatusResponse;
 import java.util.Collections;
 import java.util.List;
 import model.StoryWriterModel;
@@ -39,18 +40,18 @@ public class StoryControllerTest {
 
   @Test
   public void writerStoryResponse() {
-    controller.load("Go Right!");
-    StoryResponse response = controller.getCurrentStory();
+    controller.loadWork("Go Right!");
+    StoryResponse response = controller.getCurrentWorkAsStory();
     assertEquals("Go Right!", response.getName());
 
     List<StoryStatusResponse> statuses = response.getStatuses();
     assertEquals("numLefts", statuses.get(0).getName());
     assertEquals("numStraights", statuses.get(1).getName());
     for (StoryStatusResponse status : statuses) {
-      assertEquals(0, status.getInitialValue());
+      assertEquals(0, status.getValue());
     }
 
     List<ChoiceResponse> choices = response.getChoices();
-    assertEquals(0, choices.get(0).getChoiceId());
+    assertEquals(0, choices.get(0).getId());
   }
 }

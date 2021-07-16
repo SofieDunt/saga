@@ -1,4 +1,4 @@
-package com.response;
+package service.response;
 
 import java.util.ArrayList;
 import java.util.List;

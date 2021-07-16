@@ -1,7 +1,7 @@
 package model.game.decision;
 
-import com.response.DecisionResponse;
-import com.response.StatusUpdateResponse;
+import service.response.DecisionResponse;
+import service.response.StatusUpdateResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

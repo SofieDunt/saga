@@ -1,4 +1,4 @@
-package com.controller;
+package service.controller;
 
 import java.io.IOException;
 import org.springframework.http.HttpStatus;

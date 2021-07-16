@@ -37,7 +37,7 @@ public class StoryGameCreatorTest {
 
   @Test
   public void testConstructor() {
-    StoryCreator<StoryGame> creator = new StoryGameCreator(null);
+    StoryCreator<StoryGame> creator = new StoryGameCreator((String) null);
     assertEquals("Untitled", creator.getStoryName());
     assertEquals(0, creator.getDecisions().size());
     assertEquals(0, creator.getChoices().size());

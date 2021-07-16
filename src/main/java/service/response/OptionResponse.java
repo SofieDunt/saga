@@ -1,4 +1,4 @@
-package com.response;
+package service.response;
 
 /**
  * Represents the body of the response sent to the client to represent an option of a choice.

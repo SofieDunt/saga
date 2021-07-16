@@ -32,7 +32,15 @@ public interface OutcomeDeterminer {
 
   /**
    * Returns a list of all the outcomes the determiner chooses between.
+   *
    * @return the list of possible choice outcomes
    */
   List<Choice> getPossibleOutcomes();
+
+  /**
+   * Gets the name of the statuses the determiner is dependent on.
+   *
+   * @return a list of the status names
+   */
+  List<String> getDependency();
 }

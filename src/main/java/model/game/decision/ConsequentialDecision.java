@@ -1,6 +1,8 @@
 package model.game.decision;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -78,5 +80,10 @@ public class ConsequentialDecision extends SimpleDecision {
     }
     sb.append("] ").append(choiceRepresentations.get(this.outcome));
     return sb.toString();
+  }
+
+  @Override
+  public List<String> getDependencies() {
+    return new ArrayList<>(this.statusUpdates.keySet());
   }
 }

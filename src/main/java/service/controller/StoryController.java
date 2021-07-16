@@ -1,32 +1,24 @@
-package com.controller;
+package service.controller;
 
-import com.controller.request.AddConsequentialDecisionRequest;
-import com.controller.request.AddConsequentialDependentRequest;
-import com.controller.request.AddSimpleDecisionRequest;
-import com.controller.request.AddSimpleDependentRequest;
-import com.response.ChoiceResponse;
-import com.response.DecisionResponse;
-import com.response.OptionResponse;
-import com.response.StoryResponse;
-import com.response.StoryStatusResponse;
+import service.controller.request.AddConsequentialDecisionRequest;
+import service.controller.request.AddConsequentialDependentRequest;
+import service.controller.request.AddSimpleDecisionRequest;
+import service.controller.request.AddSimpleDependentRequest;
+import service.response.StoryResponse;
 import controller.command.ExportStory;
 import controller.command.ExportWork;
 import controller.command.ImportStory;
+import controller.command.ImportWork;
+import io.StoryNodes;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Scanner;
 import model.SimpleStoryPlayerModel;
 import model.SimpleStoryWriterModel;
 import model.StoryPlayerModel;
 import model.StoryWriterModel;
 import model.game.Choice;
 import model.game.StoryGame;
-import model.game.decision.Decision;
-import model.game.decision.DecisionCreator;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,24 +34,34 @@ public class StoryController extends ControllerExceptionHandler {
   private static final String PLAYER_BASE = "/player";
   private static final String WRITER_BASE = "/writer";
 
-  // JOINT
-
-  @PostMapping(WRITER_BASE + "/export-to-player")
-  public String exportToPlayer() {
-    playerModel.addStory(writerModel.create());
-    return "Success!";
-  }
-
   // Player
 
-  @GetMapping(PLAYER_BASE + "/current-story")
+  @GetMapping(PLAYER_BASE + "/current/name")
   public String getCurrentStoryName() {
     return playerModel.getCurrentStoryName();
   }
 
-  @GetMapping(PLAYER_BASE + "/current-choice")
+  @GetMapping(PLAYER_BASE + "/current/choice")
   public String getCurrentChoice() {
     return playerModel.getCurrentChoice();
+  }
+
+  @GetMapping(PLAYER_BASE + "/current/story")
+  public StoryResponse getCurrentStory() {
+    String current = playerModel.getCurrentStoryName();
+    if (current == null) {
+      return null;
+    } else {
+      StoryGame story = playerModel.getStory(current);
+      StoryNodes nodes = StoryNodes.createNodes(story);
+      List<Choice> choices = nodes.getChoices();
+      return new StoryResponse(
+          current,
+          story.getStatuses(),
+          choices,
+          nodes.getDecisions(),
+          choices.indexOf(story.getCurrentChoice()));
+    }
   }
 
   @GetMapping(PLAYER_BASE + "/stories")
@@ -83,45 +85,38 @@ public class StoryController extends ControllerExceptionHandler {
   }
 
   @PostMapping(PLAYER_BASE + "/import")
-  public String importStory(@RequestParam("path") String path) {
+  public void importStory(@RequestParam("path") String path) {
     new ImportStory(path).execute(playerModel);
-    return "Success";
   }
 
   @PostMapping(PLAYER_BASE + "/next")
-  public String next() {
+  public void next() {
     playerModel.next(0);
-    return playerModel.getCurrentChoice();
   }
 
   @PostMapping(PLAYER_BASE + "/choose")
-  public String choose(@RequestParam("decision") int decision) {
+  public void choose(@RequestParam("decision") int decision) {
     playerModel.next(decision);
-    return playerModel.getCurrentChoice();
   }
 
-  @PostMapping(PLAYER_BASE + "/play")
-  public String play(@RequestParam("name") String story) {
+  @PostMapping(PLAYER_BASE + "/load")
+  public void loadStory(@RequestParam("name") String story) {
     playerModel.playStory(story);
-    return playerModel.getCurrentStoryName();
   }
 
   @PostMapping(PLAYER_BASE + "/restart")
-  public String restart() {
+  public void restart() {
     playerModel.restart();
-    return playerModel.getCurrentChoice();
   }
 
   @PostMapping(PLAYER_BASE + "/quit")
-  public String quitStory() {
+  public void quitStory() {
     playerModel.quitStory();
-    return "Success";
   }
 
-  @PostMapping(PLAYER_BASE + "/remove")
-  public List<String> removeStory(@RequestParam("name") String name) {
+  @DeleteMapping(PLAYER_BASE + "/remove")
+  public void removeStory(@RequestParam("name") String name) {
     playerModel.removeStory(name);
-    return playerModel.getAllStoryNames();
   }
 
   // Writer
@@ -131,69 +126,42 @@ public class StoryController extends ControllerExceptionHandler {
     return writerModel.getAllWorkNames();
   }
 
-  @GetMapping(WRITER_BASE + "/current/work-name")
+  @GetMapping(WRITER_BASE + "/current/name")
   public String getCurrentWorkName() {
     return writerModel.getCurrentWorkName();
   }
 
-  @GetMapping(WRITER_BASE + "/current/choices")
-  public List<StoryStatusResponse> getCurrentStatuses() {
-    Map<String, Integer> statuses = writerModel.getStatuses();
-    List<StoryStatusResponse> response = new ArrayList<>();
-    for (Entry<String, Integer> status : statuses.entrySet()) {
-      response.add(new StoryStatusResponse(status));
-    }
-    return response;
-  }
 
   @GetMapping(WRITER_BASE + "/current/story")
-  public StoryResponse getCurrentStory() {
+  public StoryResponse getCurrentWorkAsStory() {
     if (writerModel.getCurrentWorkName() == null) {
       return null;
     }
-    List<StoryStatusResponse> statusResponse = new ArrayList<>();
-    Map<String, Integer> statuses = writerModel.getStatuses();
-    for (Entry<String, Integer> status : statuses.entrySet()) {
-      statusResponse.add(new StoryStatusResponse(status));
-    }
-    List<Choice> choices = writerModel.getChoices();
-    List<Decision> decisions = writerModel.getDecisions();
-
-    List<ChoiceResponse> choiceResponses = new ArrayList<>();
-    Map<Choice, String> choiceRepresentation = new HashMap<>();
-    for (int i = 0; i < choices.size(); i++) {
-      List<Decision> options = choices.get(i).getOptions();
-      List<OptionResponse> optionResponses = new ArrayList<>();
-      for (int o = 0; o < options.size(); o++) {
-        optionResponses.add(new OptionResponse(o, decisions.indexOf(options.get(o))));
-      }
-      choiceResponses.add(new ChoiceResponse(i, optionResponses));
-      choiceRepresentation.put(choices.get(i), "C" + i);
-    }
-
-    List<DecisionResponse> decisionResponses = new ArrayList<>();
-    for (int i = 0; i < decisions.size(); i++) {
-      decisionResponses
-          .add(DecisionCreator
-              .createDecisionResponse(i, new Scanner(decisions.get(i).export(choiceRepresentation)),
-                  choices));
-    }
-
     return new StoryResponse(
         writerModel.getStoryName(),
-        statusResponse,
-        choiceResponses,
-        decisionResponses,
+        writerModel.getStatuses(),
+        writerModel.getChoices(),
+        writerModel.getDecisions(),
         writerModel.getInitialChoice());
   }
 
-  @GetMapping(WRITER_BASE + "export")
+  @GetMapping(WRITER_BASE + "/export")
   public void export(@RequestParam("path") String path) throws IOException {
     new ExportWork(path).execute(writerModel);
   }
 
+  @PostMapping(WRITER_BASE + "/import")
+  public void importToWriter(@RequestParam("path") String path) throws IOException {
+    new ImportWork(path).execute(this.writerModel);
+  }
+
+  @PostMapping(WRITER_BASE + "/export-to-player")
+  public void exportToPlayer() {
+    playerModel.addStory(writerModel.create());
+  }
+
   @PostMapping(WRITER_BASE + "/load")
-  public void load(@RequestParam("name") String name) {
+  public void loadWork(@RequestParam("name") String name) {
     writerModel.load(name);
   }
 
@@ -202,7 +170,7 @@ public class StoryController extends ControllerExceptionHandler {
     writerModel.quit();
   }
 
-  @PostMapping(WRITER_BASE + "/remove")
+  @DeleteMapping(WRITER_BASE + "/remove")
   public void removeWork(@RequestParam("name") String name) {
     writerModel.remove(name);
   }
@@ -227,7 +195,7 @@ public class StoryController extends ControllerExceptionHandler {
     writerModel.addStatus(name, val);
   }
 
-  @PostMapping(WRITER_BASE + "/remove/status")
+  @DeleteMapping(WRITER_BASE + "/remove/status")
   public void removeStatus(@RequestParam("name") String name) {
     writerModel.removeStatus(name);
   }
@@ -269,12 +237,12 @@ public class StoryController extends ControllerExceptionHandler {
         request.getOutcomeMeetsId(), request.getConsequences());
   }
 
-  @PostMapping(WRITER_BASE + "/remove/option")
+  @DeleteMapping(WRITER_BASE + "/remove/option")
   public void removeOption(@RequestParam("choice") int choice, @RequestParam("opt") int option) {
     writerModel.removeDecision(choice, option);
   }
 
-  @PostMapping(WRITER_BASE + "/remove/choice")
+  @DeleteMapping(WRITER_BASE + "/remove/choice")
   public void removeChoice(@RequestParam("choice") int choice) {
     writerModel.removeChoice(choice);
   }

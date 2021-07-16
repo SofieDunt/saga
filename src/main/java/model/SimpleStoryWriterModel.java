@@ -9,6 +9,7 @@ import model.game.StoryGame;
 import model.game.decision.Decision;
 import utils.Library;
 import utils.MapLibrary;
+import utils.Utils;
 
 /**
  * Represents a model for a story builder application that keeps track of a user's works and allows
@@ -35,6 +36,12 @@ public class SimpleStoryWriterModel implements StoryWriterModel<StoryGame> {
           }
         });
     this.currentWork = null;
+  }
+
+  @Override
+  public void add(StoryGame story) throws IllegalArgumentException {
+    Utils.ensureNotNull(story, "Story can't be null!");
+    this.workLibrary.add(story.getName(), new StoryGameCreator(story));
   }
 
   @Override

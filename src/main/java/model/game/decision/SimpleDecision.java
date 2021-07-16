@@ -54,5 +54,10 @@ public class SimpleDecision implements Decision {
   public List<Choice> getPossibleOutcomes() {
     return new ArrayList<>(Collections.singletonList(this.outcome));
   }
+
+  @Override
+  public List<String> getDependencies() {
+    return new ArrayList<>();
+  }
 }
 

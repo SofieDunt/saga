@@ -1,4 +1,4 @@
-package com.controller.request;
+package service.controller.request;
 
 /**
  * Represents the body of a request to add a simple dependent decision in the story writer.

@@ -2,6 +2,7 @@ package model.game.decision;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import model.game.Choice;
@@ -68,5 +69,10 @@ public class TwoThresholdDeterminer implements OutcomeDeterminer {
   @Override
   public List<Choice> getPossibleOutcomes() {
     return new ArrayList<>(Arrays.asList(this.below, this.meets));
+  }
+
+  @Override
+  public List<String> getDependency() {
+    return Collections.singletonList(this.dependency);
   }
 }
