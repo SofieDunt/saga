@@ -1,4 +1,4 @@
-package service.controller.request;
+package controller.service.request;
 
 /**
  * Represents the body of a request to add a simple decision in the story writer.
@@ -8,6 +8,12 @@ public class AddSimpleDecisionRequest {
   private String description;
   private int choiceId;
   private int outcomeId;
+
+  public AddSimpleDecisionRequest() {
+    this.description = null;
+    this.choiceId = -1;
+    this.outcomeId = -1;
+  }
 
   public AddSimpleDecisionRequest(String description, int choiceId, int outcomeId) {
     this.description = description;

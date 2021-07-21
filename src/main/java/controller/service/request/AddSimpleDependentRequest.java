@@ -1,4 +1,4 @@
-package service.controller.request;
+package controller.service.request;
 
 /**
  * Represents the body of a request to add a simple dependent decision in the story writer.
@@ -11,6 +11,15 @@ public class AddSimpleDependentRequest {
   private int threshold;
   private int outcomeBelowId;
   private int outcomeMeetsId;
+
+  public AddSimpleDependentRequest() {
+    this.description = "";
+    this.choiceId = -1;
+    this.dependency = "";
+    this.threshold = 0;
+    this.outcomeBelowId = -1;
+    this.outcomeMeetsId = -1;
+  }
 
   public AddSimpleDependentRequest(String description, int choiceId, String dependency,
       int threshold, int outcomeBelowId, int outcomeMeetsId) {

@@ -1,7 +1,7 @@
 package model.game.decision;
 
-import service.response.DecisionResponse;
-import service.response.StatusUpdateResponse;
+import controller.service.response.DecisionResponse;
+import controller.service.response.StatusUpdateResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -165,6 +165,7 @@ public class DecisionCreator {
                 ILLEGAL_DETERMINER_FORMAT_MESSAGE));
         response.setOutcome2Id(
             IOUtils.getNumId(tryNextDeterminer(sc), ILLEGAL_DETERMINER_FORMAT_MESSAGE));
+        return response;
       default:
         throw new IllegalArgumentException(ILLEGAL_DETERMINER_FORMAT_MESSAGE);
     }

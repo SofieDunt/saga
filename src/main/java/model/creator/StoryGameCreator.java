@@ -89,6 +89,10 @@ public class StoryGameCreator implements StoryCreator<StoryGame> {
   @Override
   public void setStoryName(String name) throws IllegalArgumentException {
     Utils.ensureNotNull(name, "Name can't be null");
+    if (name.equals("")) {
+      throw new IllegalArgumentException("Name can't be empty");
+    }
+
     this.storyName = name;
   }
 

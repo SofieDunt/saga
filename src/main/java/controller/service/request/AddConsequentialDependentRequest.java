@@ -1,4 +1,4 @@
-package service.controller.request;
+package controller.service.request;
 
 import java.util.List;
 
@@ -8,6 +8,10 @@ import java.util.List;
 public class AddConsequentialDependentRequest extends AddSimpleDependentRequest {
 
   private List<String> consequences;
+
+  public AddConsequentialDependentRequest() {
+
+  }
 
   public AddConsequentialDependentRequest(String description, int choiceId, String dependency,
       int threshold, int outcomeBelowId, int outcomeMeetsId, List<String> consequences) {

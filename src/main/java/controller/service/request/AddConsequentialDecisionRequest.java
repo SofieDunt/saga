@@ -1,5 +1,6 @@
-package service.controller.request;
+package controller.service.request;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -8,6 +9,11 @@ import java.util.List;
 public class AddConsequentialDecisionRequest extends AddSimpleDecisionRequest {
 
   private List<String> consequences;
+
+  public AddConsequentialDecisionRequest() {
+    super();
+    this.consequences = new ArrayList<>();
+  }
 
   public AddConsequentialDecisionRequest(String description, int choiceId, int outcomeId,
       List<String> consequences) {

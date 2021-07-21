@@ -1,6 +1,6 @@
 package model.game.statusUpdate;
 
-import service.response.StatusUpdateResponse;
+import controller.service.response.StatusUpdateResponse;
 import java.util.Scanner;
 import utils.IOUtils;
 import utils.Utils;

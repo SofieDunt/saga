@@ -1,11 +1,10 @@
-package service.controller;
+package controller.service;
 
 import static org.testng.Assert.assertEquals;
 
-import service.controller.StoryController;
-import service.response.ChoiceResponse;
-import service.response.StoryResponse;
-import service.response.StoryStatusResponse;
+import controller.service.response.ChoiceResponse;
+import controller.service.response.StoryResponse;
+import controller.service.response.StoryStatusResponse;
 import java.util.Collections;
 import java.util.List;
 import model.StoryWriterModel;
@@ -14,11 +13,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Tests for {@link StoryController}s.
+ * Tests for {@link ServiceController}s.
  */
-public class StoryControllerTest {
+public class ServiceControllerTest {
 
-  private final StoryController controller = new StoryController();
+  private final ServiceController controller = new ServiceController();
 
   @Before
   public void init() {
@@ -41,7 +40,7 @@ public class StoryControllerTest {
   @Test
   public void writerStoryResponse() {
     controller.loadWork("Go Right!");
-    StoryResponse response = controller.getCurrentWorkAsStory();
+    StoryResponse response = controller.getCurrentWork();
     assertEquals("Go Right!", response.getName());
 
     List<StoryStatusResponse> statuses = response.getStatuses();

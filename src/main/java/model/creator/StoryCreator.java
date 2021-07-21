@@ -21,7 +21,7 @@ public interface StoryCreator<K> extends StoryCreatorState {
    * Sets the name of the story being created to the given name.
    *
    * @param name the name
-   * @throws IllegalArgumentException if the given name is null
+   * @throws IllegalArgumentException if the given name is null or empty
    */
   void setStoryName(String name) throws IllegalArgumentException;
 

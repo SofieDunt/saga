@@ -1,4 +1,4 @@
-package service.response;
+package controller.service.response;
 
 import java.util.List;
 
