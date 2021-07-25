@@ -218,6 +218,12 @@ public class ServiceController extends ControllerExceptionHandler implements
   }
 
   @Override
+  @GetMapping(WRITER_BASE + "/current/initial-choice")
+  public int getCurrentWorkInitialChoice() {
+    return writerModel.getInitialChoice();
+  }
+
+  @Override
   @GetMapping(WRITER_BASE + "/current/choices")
   public List<ChoiceResponse> getCurrentWorkChoices() {
     List<Choice> choices = writerModel.getChoices();

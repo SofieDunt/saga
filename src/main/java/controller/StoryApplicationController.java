@@ -156,6 +156,14 @@ public interface StoryApplicationController {
   List<StoryStatusResponse> getCurrentWorkStatuses();
 
   /**
+   * Gets the id of the initial choice of the work currently being edited, or -1 if the loaded work
+   * has no initial choice, or -123456789 if no work is loaded.
+   *
+   * @return the index id of the initial choice
+   */
+  int getCurrentWorkInitialChoice();
+
+  /**
    * Gets all choices of the work currently being edited, or null if no work is loaded.
    *
    * @return a list of choices as choice responses
