@@ -304,7 +304,7 @@ public class ServiceController extends ControllerExceptionHandler implements
 
   @Override
   @PostMapping(WRITER_BASE + "/rename")
-  public void renameWork(@RequestParam("name") String name, @RequestParam("new") String newName) {
+  public void renameWork(@RequestParam("name") String name, @RequestParam("newName") String newName) {
     writerModel.rename(name, newName);
   }
 

@@ -10,7 +10,7 @@
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   <groupId>com</groupId>
-  <artifactId>story-time</artifactId>
+  <artifactId>saga</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>story-time</name>
   <description>Story player and writer application with Spring Boot</description>
